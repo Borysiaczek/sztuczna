@@ -1,0 +1,13 @@
+services:
+  starosta-hub:
+    build: .
+    container_name: starosta_hub_rau2
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATABASE_URL=sqlite:///./data/starosta_hub.db

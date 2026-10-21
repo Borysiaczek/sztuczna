@@ -1,0 +1,3090 @@
+<!DOCTYPE html>
+<html lang="pl" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starosta Hub | Politechnika Śląska AEiI (RAU2)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate950: '#070b14',
+            polslBlue: '#1d4ed8',
+            polslGold: '#f59e0b'
+          }
+        }
+      }
+    };
+  </script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      background-color: #070b14;
+      color: #f1f5f9;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-blue-600 selection:text-white">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useRef } = React;
+
+    // ==================== SYSTEM WEKTOROWYCH IKON SVG (ZERO EMOTEK) ====================
+    function Icon({ name, className = "w-4 h-4" }) {
+      const props = {
+        className,
+         viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "2",
+        strokeLinecap: "round",
+        strokeLinejoin: "round"
+      };
+
+      switch (name) {
+        case 'timeline':
+          return (
+            <svg {...props}>
+              <path d="M3 3v18h18" />
+              <path d="m19 9-5 5-4-4-3 3" />
+            </svg>
+          );
+        case 'calendar':
+          return (
+            <svg {...props}>
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+              <line x1="16" x2="16" y1="2" y2="6" />
+              <line x1="8" x2="8" y1="2" y2="6" />
+              <line x1="3" x2="21" y1="10" y2="10" />
+            </svg>
+          );
+        case 'users':
+          return (
+            <svg {...props}>
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          );
+        case 'book':
+          return (
+            <svg {...props}>
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+            </svg>
+          );
+        case 'shield':
+          return (
+            <svg {...props}>
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          );
+        case 'mail':
+          return (
+            <svg {...props}>
+              <rect width="20" height="16" x="2" y="4" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+          );
+        case 'send':
+          return (
+            <svg {...props}>
+              <line x1="22" x2="11" y1="2" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          );
+        case 'upload':
+          return (
+            <svg {...props}>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" x2="12" y1="3" y2="15" />
+            </svg>
+          );
+        case 'download':
+          return (
+            <svg {...props}>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" x2="12" y1="15" y2="3" />
+            </svg>
+          );
+        case 'search':
+          return (
+            <svg {...props}>
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+          );
+        case 'plus':
+          return (
+            <svg {...props}>
+              <line x1="12" x2="12" y1="5" y2="19" />
+              <line x1="5" x2="19" y1="12" y2="12" />
+            </svg>
+          );
+        case 'trash':
+          return (
+            <svg {...props}>
+              <path d="M3 6h18" />
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+            </svg>
+          );
+        case 'check':
+          return (
+            <svg {...props}>
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          );
+        case 'circle':
+          return (
+            <svg {...props}>
+              <circle cx="12" cy="12" r="9" />
+            </svg>
+          );
+        case 'close':
+          return (
+            <svg {...props}>
+              <line x1="18" x2="6" y1="6" y2="18" />
+              <line x1="6" x2="18" y1="6" y2="18" />
+            </svg>
+          );
+        case 'alert':
+          return (
+            <svg {...props}>
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+              <line x1="12" x2="12" y1="9" y2="13" />
+              <line x1="12" x2="12.01" y1="17" y2="17" />
+            </svg>
+          );
+        case 'clock':
+          return (
+            <svg {...props}>
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          );
+        case 'mapPin':
+          return (
+            <svg {...props}>
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          );
+        case 'link':
+          return (
+            <svg {...props}>
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+          );
+        case 'refresh':
+          return (
+            <svg {...props}>
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+              <path d="M21 3v5h-5" />
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+              <path d="M8 16H3v5" />
+            </svg>
+          );
+        case 'user':
+          return (
+            <svg {...props}>
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          );
+        case 'camera':
+          return (
+            <svg {...props}>
+              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+              <circle cx="12" cy="13" r="3" />
+            </svg>
+          );
+        case 'chevronLeft':
+          return (
+            <svg {...props}>
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          );
+        case 'chevronRight':
+          return (
+            <svg {...props}>
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          );
+        case 'eyeOff':
+          return (
+            <svg {...props}>
+              <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+              <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+              <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+              <line x1="2" x2="22" y1="2" y2="22" />
+            </svg>
+          );
+        case 'pin':
+          return (
+            <svg {...props}>
+              <line x1="12" x2="12" y1="17" y2="22" />
+              <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z" />
+            </svg>
+          );
+        case 'graduation':
+          return (
+            <svg {...props}>
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+              <path d="M6 12v5c3 3 9 3 12 0v-5" />
+            </svg>
+          );
+        default:
+          return null;
+      }
+    }
+
+    // Kategorie zajęć dydaktycznych (wykluczone ze Wspólnej Osi Czasu, wyświetlane w zakładce Kalendarz)
+    const CLASS_CATEGORIES = ['WYKLAD', 'LAB', 'LEKTORAT', 'CWICZENIA', 'PROJEKT'];
+    // Kategorie terminów ważnych (wyświetlane na Wspólnej Osi Czasu na Dashboardzie)
+    const TIMELINE_ONLY_CATEGORIES = ['KOLOKWIUM', 'EGZAMIN', 'DEADLINE_RAU2', 'INNE'];
+
+    async function apiFetch(url, options = {}) {
+      const config = {
+        credentials: 'include',
+        headers: {
+          ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+          ...(options.headers || {})
+        },
+        ...options
+      };
+      const response = await fetch(url, config);
+      if (!response.ok) {
+        let errMessage = `Błąd HTTP ${response.status}`;
+        try {
+          const errData = await response.json();
+          errMessage = errData.detail || errData.message || errMessage;
+        } catch (_) {}
+        const error = new Error(errMessage);
+        error.status = response.status;
+        throw error;
+      }
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        return await response.json();
+      }
+      return response;
+    }
+
+    function formatDateTime(dtStr) {
+      if (!dtStr) return '—';
+      const d = new Date(dtStr);
+      return d.toLocaleString('pl-PL', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function formatTimeShort(dtStr) {
+      if (!dtStr) return '';
+      const d = new Date(dtStr);
+      return d.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function getInitials(name) {
+      if (!name) return 'SR';
+      return name
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0].toUpperCase())
+        .join('');
+    }
+
+    function CategoryBadge({ category }) {
+      const map = {
+        KOLOKWIUM: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        EGZAMIN: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+        DEADLINE_RAU2: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+        LAB: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+        WYKLAD: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
+        LEKTORAT: 'bg-teal-500/20 text-teal-300 border-teal-500/40',
+        CWICZENIA: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+        PROJEKT: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+        INNE: 'bg-slate-700/50 text-slate-300 border-slate-600'
+      };
+      const cls = map[category] || map.INNE;
+      return (
+        <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${cls}`}>
+          {category}
+        </span>
+      );
+    }
+
+    function RoleBadge({ role }) {
+      const styles = {
+        ADMIN: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+        GROUP_LEADER: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+        VIEWER: 'bg-slate-700/60 text-slate-300 border-slate-600'
+      };
+      const labels = {
+        ADMIN: 'ADMIN (Starosta Roku)',
+        GROUP_LEADER: 'GROUP_LEADER (Starosta Grupy)',
+        VIEWER: 'VIEWER (Tylko odczyt)'
+      };
+      return (
+        <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full border ${styles[role] || styles.VIEWER}`}>
+          {labels[role] || role}
+        </span>
+      );
+    }
+
+    // ==================== MODAL PROFILU I ZDJĘCIA PROFILOWEGO ====================
+    function ProfileModal({ isOpen, onClose, user, onUserUpdated, showToast }) {
+      const [uploading, setUploading] = useState(false);
+      const [passwords, setPasswords] = useState({ current_password: '', new_password: '' });
+      const [changingPass, setChangingPass] = useState(false);
+
+      if (!isOpen || !user) return null;
+
+      const handleAvatarChange = async (file) => {
+        if (!file) return;
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+          const updatedUser = await apiFetch('/api/auth/avatar', {
+            method: 'POST',
+            body: formData
+          });
+          onUserUpdated(updatedUser);
+          showToast('Zdjęcie profilowe zostało zaktualizowane.');
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setUploading(false);
+        }
+      };
+
+      const handleRemoveAvatar = async () => {
+        setUploading(true);
+        try {
+          const updatedUser = await apiFetch('/api/auth/avatar', { method: 'DELETE' });
+          onUserUpdated(updatedUser);
+          showToast('Zdjęcie profilowe zostało usunięte.');
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setUploading(false);
+        }
+      };
+
+      const handleChangePassword = async (e) => {
+        e.preventDefault();
+        setChangingPass(true);
+        try {
+          await apiFetch('/api/auth/change-password', {
+            method: 'POST',
+            body: JSON.stringify(passwords)
+          });
+          setPasswords({ current_password: '', new_password: '' });
+          showToast('Hasło do konta zostało zmienione.');
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setChangingPass(false);
+        }
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="px-6 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Icon name="user" className="w-4 h-4 text-blue-400" />
+                <h3 className="text-sm font-bold text-white">Twój Profil i Zdjęcie Profilowe</h3>
+              </div>
+              <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
+                <Icon name="close" className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Sekcja Zdjęcia Profilowego */}
+              <div className="flex items-center gap-5">
+                <div className="relative group">
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={user.full_name}
+                      className="w-20 h-20 rounded-full object-cover border-2 border-blue-500 shadow-lg"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-xl font-bold text-white border-2 border-slate-700 shadow-lg">
+                      {getInitials(user.full_name)}
+                    </div>
+                  )}
+                  <label className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition">
+                    <Icon name="camera" className="w-6 h-6 text-white" />
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/gif"
+                      className="hidden"
+                      onChange={(e) => e.target.files?.[0] && handleAvatarChange(e.target.files[0])}
+                    />
+                  </label>
+                </div>
+
+                <div className="space-y-2 flex-1">
+                  <div>
+                    <div className="text-sm font-bold text-white">{user.full_name}</div>
+                    <div className="text-xs text-slate-400 font-mono">{user.email}</div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition">
+                      <Icon name="camera" className="w-3.5 h-3.5" />
+                      <span>{uploading ? 'Wgrywanie...' : 'Wgraj zdjęcie'}</span>
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif"
+                        className="hidden"
+                        disabled={uploading}
+                        onChange={(e) => e.target.files?.[0] && handleAvatarChange(e.target.files[0])}
+                      />
+                    </label>
+                    {user.avatar_url && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveAvatar}
+                        disabled={uploading}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 text-xs font-semibold transition"
+                      >
+                        <Icon name="trash" className="w-3.5 h-3.5" />
+                        <span>Usuń</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Zmiana hasła */}
+              <form onSubmit={handleChangePassword} className="pt-4 border-t border-slate-800 space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  Zmiana hasła dostępowego
+                </h4>
+                <input
+                  type="password"
+                  required
+                  placeholder="Aktualne hasło"
+                  value={passwords.current_password}
+                  onChange={(e) => setPasswords({ ...passwords, current_password: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white"
+                />
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  placeholder="Nowe hasło (min. 6 znaków)"
+                  value={passwords.new_password}
+                  onChange={(e) => setPasswords({ ...passwords, new_password: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white"
+                />
+                <div className="flex justify-end gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="px-3.5 py-1.5 rounded-lg bg-slate-800 text-xs font-semibold text-slate-300"
+                  >
+                    Zamknij
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={changingPass}
+                    className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white"
+                  >
+                    {changingPass ? 'Zapisywanie...' : 'Zmień hasło'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== WIDOK LOGOWANIA ====================
+    function LoginView({ onLoginSuccess }) {
+      const [email, setEmail] = useState('');
+      const [password, setPassword] = useState('');
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState('');
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+        try {
+          const user = await apiFetch('/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, password })
+          });
+          onLoginSuccess(user);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="min-h-screen flex items-center justify-center px-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/50 via-slate-950 to-slate-950">
+          <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl shadow-2xl p-8 backdrop-blur-md">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/30 font-bold text-xl tracking-wider">
+                RAU2
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white tracking-tight">Starosta Hub</h1>
+                <p className="text-xs text-slate-400">Politechnika Śląska • Wydział AEiI (RAU2)</p>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-400 mb-6">
+              Zaloguj się kontem Starosty Roku lub Starosty Grupy Dziekańskiej. Autoryzacja chroniona tokenem JWT (HttpOnly).
+            </p>
+
+            {error && (
+              <div className="mb-4 p-3 rounded-lg bg-rose-500/15 border border-rose-500/40 text-rose-300 text-sm flex items-center gap-2">
+                <Icon name="alert" className="w-4 h-4 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                  Adres Email (@student.polsl.pl)
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="starosta@student.polsl.pl"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-blue-500 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                  Hasło
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-blue-500 text-sm"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 font-semibold text-sm text-white shadow-lg shadow-blue-600/25 transition"
+              >
+                {loading ? 'Weryfikacja poświadczeń...' : 'Zaloguj do Panelu Starosty'}
+              </button>
+            </form>
+
+            <div className="mt-6 pt-5 border-t border-slate-800/80 text-xs text-slate-500 flex justify-between">
+              <span>Integracja: USOSweb & Moodle RAU2</span>
+              <span>Office 365 SMTP / BCC</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== MODAL WYSYŁKI MAILI (SMTP + 1-CLICK OUTLOOK FALLBACK) ====================
+    function MailModal({ isOpen, onClose, recipients, selectedGroup, mailConfig, showToast }) {
+      const [subject, setSubject] = useState('[RAU2] Komunikat Starosty Roku');
+      const [bodyTemplate, setBodyTemplate] = useState(
+        'Cześć {imie},\n\nPrzypominam o nadchodzącym terminie dla grupy {grupa}.\n\nPozdrawiam,\nStarosta Roku AEiI (RAU2)'
+      );
+      const [sending, setSending] = useState(false);
+      const [result, setResult] = useState(null);
+
+      if (!isOpen) return null;
+
+      const sampleStudent = recipients[0] || {
+        imie: 'Jan',
+        nazwisko: 'Kowalski',
+        email: 'jan.kowalski@student.polsl.pl',
+        grupa: '1',
+        komentarz: 'rozliczony'
+      };
+
+      const renderPreview = (tpl) => {
+        return tpl
+          .replaceAll('{imie}', sampleStudent.imie)
+          .replaceAll('{nazwisko}', sampleStudent.nazwisko)
+          .replaceAll('{email}', sampleStudent.email)
+          .replaceAll('{grupa}', sampleStudent.grupa)
+          .replaceAll('{komentarz}', sampleStudent.komentarz || '');
+      };
+
+      const handleSmtpSend = async (e) => {
+        e.preventDefault();
+        setSending(true);
+        setResult(null);
+        try {
+          const res = await apiFetch('/api/mail/send', {
+            method: 'POST',
+            body: JSON.stringify({
+              recipient_ids: recipients.map((r) => r.id),
+              subject,
+              body_template: bodyTemplate
+            })
+          });
+          setResult(res);
+          if (res.sent_count > 0) {
+            showToast(`Wysłano ${res.sent_count} spersonalizowanych wiadomości przez SMTP!`);
+          }
+        } catch (err) {
+          setResult({ sent_count: 0, failed_count: recipients.length, errors: [err.message] });
+        } finally {
+          setSending(false);
+        }
+      };
+
+      const handleOutlookFallback = async () => {
+        const emails = recipients.map((r) => r.email).filter(Boolean);
+        if (emails.length === 0) {
+          showToast('Brak adresów email na liście odbiorców.', 'error');
+          return;
+        }
+        const bccString = emails.join(';');
+        try {
+          await navigator.clipboard.writeText(bccString);
+          showToast(`Skopiowano ${emails.length} adresów do schowka i otwarto Outlooka (BCC)!`);
+        } catch (_) {
+          showToast(`Otwieranie Outlooka dla ${emails.length} odbiorców w BCC.`);
+        }
+        const cleanBody = bodyTemplate
+          .replaceAll('{imie}', 'Studenci')
+          .replaceAll('{grupa}', selectedGroup === 'ALL' ? 'wszystkie grupy' : selectedGroup);
+        const mailtoUrl = `mailto:?bcc=${encodeURIComponent(emails.join(','))}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(cleanBody)}`;
+        window.location.href = mailtoUrl;
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="px-6 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <Icon name="mail" className="w-5 h-5 text-blue-400" />
+                <div>
+                  <h3 className="text-base font-bold text-white">Moduł Poczty (Office 365 SMTP & 1-Click Outlook BCC)</h3>
+                  <p className="text-xs text-slate-400">
+                    Wybrano odbiorców: <strong className="text-blue-400">{recipients.length} studentów</strong>
+                  </p>
+                </div>
+              </div>
+              <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
+                <Icon name="close" className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-5 max-h-[82vh] overflow-y-auto">
+              <div className={`p-3.5 rounded-xl border text-xs flex flex-wrap items-center justify-between gap-2 ${
+                mailConfig?.is_configured
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                  : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+              }`}>
+                <div>
+                  <span className="font-semibold">Serwer SMTP ({mailConfig?.smtp_host}:{mailConfig?.smtp_port}): </span>
+                  {mailConfig?.is_configured
+                    ? `Aktywny (${mailConfig.smtp_user})`
+                    : 'Brak poświadczeń SMTP w pliku .env — użyj trybu 1-Click Outlook (BCC) lub skonfiguruj .env'}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleOutlookFallback}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition shadow"
+                >
+                  <Icon name="send" className="w-3.5 h-3.5" />
+                  <span>Otwórz w Outlook (1-Click BCC + Kopiuj adresy)</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleSmtpSend} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                    Temat wiadomości (obsługuje zmienne &#123;imie&#125;, &#123;grupa&#125;)
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm text-white"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      Szablon treści wiadomości
+                    </label>
+                    <span className="text-[11px] text-slate-400">
+                      Dostępne zmienne: <code className="text-blue-400">&#123;imie&#125;</code>, <code className="text-blue-400">&#123;nazwisko&#125;</code>, <code className="text-blue-400">&#123;grupa&#125;</code>, <code className="text-blue-400">&#123;komentarz&#125;</code>
+                    </span>
+                  </div>
+                  <textarea
+                    rows="5"
+                    required
+                    value={bodyTemplate}
+                    onChange={(e) => setBodyTemplate(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-sm text-white font-mono"
+                  />
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800">
+                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1.5">
+                    Podgląd personalizacji dla: {sampleStudent.imie} {sampleStudent.nazwisko} ({sampleStudent.email})
+                  </div>
+                  <div className="text-xs font-semibold text-slate-200 mb-1">
+                    Temat: {renderPreview(subject)}
+                  </div>
+                  <pre className="text-xs text-slate-400 whitespace-pre-wrap font-sans">
+                    {renderPreview(bodyTemplate)}
+                  </pre>
+                </div>
+
+                {result && (
+                  <div className={`p-3.5 rounded-xl border text-xs ${
+                    result.failed_count === 0
+                      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
+                      : 'bg-rose-500/15 border-rose-500/40 text-rose-300'
+                  }`}>
+                    <p className="font-semibold">
+                      Wysłano pomyślnie: {result.sent_count} | Błędy: {result.failed_count}
+                    </p>
+                    {result.errors?.length > 0 && (
+                      <ul className="mt-1.5 list-disc list-inside space-y-0.5">
+                        {result.errors.map((err, i) => <li key={i}>{err}</li>)}
+                      </ul>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300"
+                  >
+                    Zamknij
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleOutlookFallback}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600/90 hover:bg-indigo-500 text-xs font-semibold text-white"
+                  >
+                    <Icon name="mail" className="w-3.5 h-3.5" />
+                    <span>Kopiuj BCC i otwórz Outlook</span>
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={sending || recipients.length === 0}
+                    className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20"
+                  >
+                    <Icon name="send" className="w-3.5 h-3.5" />
+                    <span>{sending ? 'Wysyłanie przez SMTP...' : `Wyślij spersonalizowane maile SMTP (${recipients.length})`}</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== GŁÓWNA APLIKACJA DASHBOARDU ====================
+    function App() {
+      const [user, setUser] = useState(null);
+      const [authChecked, setAuthChecked] = useState(false);
+      const [activeTab, setActiveTab] = useState('dashboard'); // dashboard | calendar | students | rau2 | users
+      const [toast, setToast] = useState(null);
+      const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+      // Dane aplikacyjne
+      const [students, setStudents] = useState([]);
+      const [groups, setGroups] = useState([]);
+      const [selectedGroup, setSelectedGroup] = useState('ALL');
+      const [searchQuery, setSearchQuery] = useState('');
+      const [selectedStudentIds, setSelectedStudentIds] = useState([]);
+
+      // Inne moduły
+      const [courses, setCourses] = useState([]);
+      const [feeds, setFeeds] = useState([]);
+      const [events, setEvents] = useState([]);
+      const [announcements, setAnnouncements] = useState([]);
+      const [usersList, setUsersList] = useState([]);
+      const [mailConfig, setMailConfig] = useState(null);
+      const [isMailModalOpen, setIsMailModalOpen] = useState(false);
+
+      // Stany formularzy (Dodawanie studenta, Ukrywany pasek Importu Excela, Akcje masowe)
+      const [newStudent, setNewStudent] = useState({ imie: '', nazwisko: '', email: '', grupa: '1', komentarz: '' });
+      const [showAddStudentForm, setShowAddStudentForm] = useState(false);
+      const [showExcelDropzone, setShowExcelDropzone] = useState(() => {
+        return localStorage.getItem('starosta_hide_excel_dropzone') !== 'true';
+      });
+      const [importReport, setImportReport] = useState(null);
+      const [isDraggingFile, setIsDraggingFile] = useState(false);
+      const [bulkAction, setBulkAction] = useState('SET_GROUP');
+      const [bulkValue, setBulkValue] = useState('');
+
+      const canEdit = user && (user.role === 'ADMIN' || user.role === 'GROUP_LEADER');
+      const isAdmin = user && user.role === 'ADMIN';
+
+      const toggleExcelDropzone = (visible) => {
+        setShowExcelDropzone(visible);
+        localStorage.setItem('starosta_hide_excel_dropzone', visible ? 'false' : 'true');
+      };
+
+      const showToast = (message, type = 'success') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 4500);
+      };
+
+      useEffect(() => {
+        apiFetch('/api/auth/me')
+          .then((u) => setUser(u))
+          .catch(() => setUser(null))
+          .finally(() => setAuthChecked(true));
+      }, []);
+
+      const loadAllData = async () => {
+        if (!user) return;
+        try {
+          const [stuData, grpData, crsData, feedData, evData, annData, mailCfg] = await Promise.all([
+            apiFetch(`/api/students?grupa=${encodeURIComponent(selectedGroup)}&search=${encodeURIComponent(searchQuery)}`),
+            apiFetch('/api/students/groups'),
+            apiFetch('/api/courses'),
+            apiFetch('/api/calendar/feeds'),
+            apiFetch('/api/calendar/events'),
+            apiFetch('/api/announcements'),
+            apiFetch('/api/mail/config')
+          ]);
+          setStudents(stuData);
+          setGroups(grpData);
+          setCourses(crsData);
+          setFeeds(feedData);
+          setEvents(evData);
+          setAnnouncements(annData);
+          setMailConfig(mailCfg);
+
+          if (user.role === 'ADMIN') {
+            const uList = await apiFetch('/api/users');
+            setUsersList(uList);
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      useEffect(() => {
+        if (user) {
+          loadAllData();
+        }
+      }, [user]);
+
+      const fetchStudents = async (grp = selectedGroup, srch = searchQuery) => {
+        if (!user) return;
+        try {
+          const [stuData, grpData] = await Promise.all([
+            apiFetch(`/api/students?grupa=${encodeURIComponent(grp)}&search=${encodeURIComponent(srch)}`),
+            apiFetch('/api/students/groups')
+          ]);
+          setStudents(stuData);
+          setGroups(grpData);
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      useEffect(() => {
+        if (user) {
+          const timer = setTimeout(() => fetchStudents(selectedGroup, searchQuery), 150);
+          return () => clearTimeout(timer);
+        }
+      }, [selectedGroup, searchQuery]);
+
+      const handleLogout = async () => {
+        await apiFetch('/api/auth/logout', { method: 'POST' });
+        setUser(null);
+      };
+
+      // Wyłącznie ważne terminy (Kolokwia, Egzaminy, Deadline'y RAU2) - bez wykładów, laboratoriów i lektoratów
+      const timelineEventsOnly = useMemo(() => {
+        return events.filter((ev) => !CLASS_CATEGORIES.includes(ev.category));
+      }, [events]);
+
+      // ==================== OBSŁUGA STUDENTÓW & INLINE EDIT ====================
+      const handleCreateStudent = async (e) => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/students', {
+            method: 'POST',
+            body: JSON.stringify(newStudent)
+          });
+          setNewStudent({ imie: '', nazwisko: '', email: '', grupa: '1', komentarz: '' });
+          setShowAddStudentForm(false);
+          showToast('Dodano nowego studenta do bazy.');
+          fetchStudents();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleInlineUpdate = async (studentId, field, value) => {
+        const current = students.find((s) => s.id === studentId);
+        if (!current || current[field] === value) return;
+        try {
+          const updated = await apiFetch(`/api/students/${studentId}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ [field]: value })
+          });
+          setStudents((prev) => prev.map((s) => (s.id === studentId ? updated : s)));
+          if (field === 'grupa') {
+            const grpData = await apiFetch('/api/students/groups');
+            setGroups(grpData);
+          }
+          showToast(`Zaktualizowano pole "${field}" dla ${updated.imie} ${updated.nazwisko}`);
+        } catch (err) {
+          showToast(err.message, 'error');
+          fetchStudents();
+        }
+      };
+
+      const handleDeleteStudent = async (studentId) => {
+        if (!window.confirm('Czy na pewno chcesz usunąć tego studenta z bazy?')) return;
+        try {
+          await apiFetch(`/api/students/${studentId}`, { method: 'DELETE' });
+          setStudents((prev) => prev.filter((s) => s.id !== studentId));
+          setSelectedStudentIds((prev) => prev.filter((id) => id !== studentId));
+          showToast('Usunięto studenta.');
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleFileUpload = async (file) => {
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+          const res = await apiFetch('/api/students/import', {
+            method: 'POST',
+            body: formData
+          });
+          setImportReport(res);
+          showToast(`Import zakończony! Dodano: ${res.inserted}, Zaktualizowano: ${res.updated}`);
+          fetchStudents();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleBulkExecute = async (e) => {
+        e.preventDefault();
+        if (selectedStudentIds.length === 0) {
+          showToast('Zaznacz najpierw studentów w tabeli.', 'error');
+          return;
+        }
+        if (bulkAction === 'DELETE' && !window.confirm(`Usunąć zaznaczonych studentów (${selectedStudentIds.length})?`)) {
+          return;
+        }
+        try {
+          const res = await apiFetch('/api/students/bulk', {
+            method: 'POST',
+            body: JSON.stringify({
+              student_ids: selectedStudentIds,
+              action: bulkAction,
+              value: bulkValue
+            })
+          });
+          showToast(`Wykonano akcję masową dla ${res.affected} studentów.`);
+          setSelectedStudentIds([]);
+          setBulkValue('');
+          fetchStudents();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const triggerQuickOutlookBCC = async () => {
+        const targetList = selectedStudentIds.length > 0
+          ? students.filter((s) => selectedStudentIds.includes(s.id))
+          : students;
+
+        const emails = targetList.map((s) => s.email).filter(Boolean);
+        if (emails.length === 0) {
+          showToast('Brak studentów na liście do wygenerowania BCC.', 'error');
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(emails.join(';'));
+          showToast(`Skopiowano ${emails.length} adresów do schowka i otwarto Outlook (BCC)!`);
+        } catch (_) {}
+        window.location.href = `mailto:?bcc=${encodeURIComponent(emails.join(','))}&subject=${encodeURIComponent('[RAU2] Informacja od Starosty Roku')}`;
+      };
+
+      const mailRecipients = useMemo(() => {
+        if (selectedStudentIds.length > 0) {
+          return students.filter((s) => selectedStudentIds.includes(s.id));
+        }
+        return students;
+      }, [students, selectedStudentIds]);
+
+      if (!authChecked) {
+        return (
+          <div className="min-h-screen flex items-center justify-center text-slate-400 text-sm">
+            Ładowanie Starosta Hub (RAU2)...
+          </div>
+        );
+      }
+
+      if (!user) {
+        return <LoginView onLoginSuccess={(u) => setUser(u)} />;
+      }
+
+      const allGroupsList = Array.from(new Set(['1', '2', '3', ...groups]));
+
+      return (
+        <div className="min-h-screen flex flex-col bg-slate950 text-slate-100">
+          {/* POWIADOMIENIE TOAST */}
+          {toast && (
+            <div className={`fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl border text-xs font-semibold flex items-center gap-2.5 transition-all ${
+              toast.type === 'error'
+                ? 'bg-rose-950/95 border-rose-500/50 text-rose-200'
+                : 'bg-slate-900/95 border-blue-500/50 text-blue-200'
+            }`}>
+              <Icon name={toast.type === 'error' ? 'alert' : 'check'} className="w-4 h-4 shrink-0" />
+              <span>{toast.message}</span>
+            </div>
+          )}
+
+          {/* GÓRNY PASEK NAWIGACYJNY */}
+          <header className="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-3.5">
+            <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-bold text-sm shadow-md shadow-blue-600/30">
+                  RAU2
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-base text-white">Starosta Hub</span>
+                    <span className="text-[11px] px-2 py-0.5 rounded bg-blue-500/15 text-blue-400 border border-blue-500/30 font-medium">
+                      Politechnika Śląska • AEiI
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    Zalogowano jako: <strong className="text-slate-200">{user.full_name}</strong>
+                  </p>
+                </div>
+              </div>
+
+              {/* Nawigacja Zakładek (Z IKONAMI SVG) */}
+              <nav className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+                <button
+                  onClick={() => setActiveTab('dashboard')}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+                    activeTab === 'dashboard' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Icon name="timeline" className="w-3.5 h-3.5" />
+                  <span>Oś Czasu & Ogłoszenia</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('calendar')}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+                    activeTab === 'calendar' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Icon name="calendar" className="w-3.5 h-3.5" />
+                  <span>Kalendarz Zajęć</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('students')}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+                    activeTab === 'students' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Icon name="users" className="w-3.5 h-3.5" />
+                  <span>Baza Studentów ({students.length})</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('rau2')}
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+                    activeTab === 'rau2' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Icon name="book" className="w-3.5 h-3.5" />
+                  <span>Przedmioty RAU2 & .ics</span>
+                </button>
+                {isAdmin && (
+                  <button
+                    onClick={() => setActiveTab('users')}
+                    className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+                      activeTab === 'users' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Icon name="shield" className="w-3.5 h-3.5" />
+                    <span>Użytkownicy</span>
+                  </button>
+                )}
+              </nav>
+
+              {/* Profil Użytkownika ze Zdjęciem Profilowym */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsProfileModalOpen(true)}
+                  className="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full bg-slate-950 hover:bg-slate-800 border border-slate-800 transition group"
+                  title="Kliknij, aby ustawić zdjęcie profilowe lub zmienić hasło"
+                >
+                  <div className="relative">
+                    {user.avatar_url ? (
+                      <img
+                        src={user.avatar_url}
+                        alt={user.full_name}
+                        className="w-8 h-8 rounded-full object-cover border border-blue-500"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-xs font-bold text-white">
+                        {getInitials(user.full_name)}
+                      </div>
+                    )}
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-blue-400">
+                      <Icon name="camera" className="w-2.5 h-2.5" />
+                    </span>
+                  </div>
+                  <div className="text-left hidden sm:block">
+                    <div className="text-xs font-semibold text-slate-200 group-hover:text-white leading-tight">
+                      {user.full_name}
+                    </div>
+                    <div className="text-[10px] text-blue-400 leading-tight">{user.role}</div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-600/80 text-xs font-semibold text-slate-300 hover:text-white transition"
+                >
+                  Wyloguj
+                </button>
+              </div>
+            </div>
+          </header>
+
+          {/* GŁÓWNA ZAWARTOŚĆ */}
+          <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-6 space-y-6">
+            {/* KARTY STATYSTYK ROKU */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-400 uppercase font-semibold">Studenci (Filtr)</p>
+                  <p className="text-2xl font-bold text-white mt-1">{students.length}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">Grupy: {groups.join(', ') || '1, 2, 3'}</p>
+                </div>
+                <div className="w-11 h-11 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                  <Icon name="users" className="w-5 h-5" />
+                </div>
+              </div>
+
+              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-400 uppercase font-semibold">Przedmioty RAU2 / USOS</p>
+                  <p className="text-2xl font-bold text-white mt-1">{courses.length}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">platforma.polsl.pl/rau2</p>
+                </div>
+                <div className="w-11 h-11 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                  <Icon name="book" className="w-5 h-5" />
+                </div>
+              </div>
+
+              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-400 uppercase font-semibold">Kolokwia, Egzaminy i Moodle</p>
+                  <p className="text-2xl font-bold text-amber-400 mt-1">{timelineEventsOnly.length}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    Zajęcia w Kalendarzu: {events.length - timelineEventsOnly.length}
+                  </p>
+                </div>
+                <div className="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <Icon name="calendar" className="w-5 h-5" />
+                </div>
+              </div>
+
+              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-400 uppercase font-semibold">Szybka Komunikacja</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      onClick={() => setIsMailModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition"
+                    >
+                      <Icon name="mail" className="w-3.5 h-3.5" />
+                      <span>Kreator SMTP</span>
+                    </button>
+                    <button
+                      onClick={triggerQuickOutlookBCC}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition"
+                      title="Kopiuj adresy wyfiltrowanych studentów i otwórz Outlook BCC"
+                    >
+                      <Icon name="send" className="w-3.5 h-3.5" />
+                      <span>1-Click BCC</span>
+                    </button>
+                  </div>
+                </div>
+                <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <Icon name="send" className="w-5 h-5" />
+                </div>
+              </div>
+            </section>
+
+            {/* ==================== ZAKŁADKA 1: DASHBOARD (OŚ CZASU BEZ ZAJĘĆ USOS + TABLICA OGŁOSZEŃ) ==================== */}
+            {activeTab === 'dashboard' && (
+              <DashboardTimelineAndAnnouncements
+                events={timelineEventsOnly}
+                announcements={announcements}
+                allGroupsList={allGroupsList}
+                canEdit={canEdit}
+                onRefresh={loadAllData}
+                onOpenCalendarTab={() => setActiveTab('calendar')}
+                showToast={showToast}
+              />
+            )}
+
+            {/* ==================== ZAKŁADKA 2: DEDYKOWANY KALENDARZ ZAJĘĆ (PLAN Z USOS & RAU2) ==================== */}
+            {activeTab === 'calendar' && (
+              <ScheduleCalendarView
+                events={events}
+                courses={courses}
+                allGroupsList={allGroupsList}
+                canEdit={canEdit}
+                onRefresh={loadAllData}
+                showToast={showToast}
+              />
+            )}
+
+            {/* ==================== ZAKŁADKA 3: BAZA STUDENTÓW + UKRYWANY IMPORT EXCEL + INLINE EDIT ==================== */}
+            {activeTab === 'students' && (
+              <section className="space-y-5">
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-lg font-bold text-white">Baza Studentów Roku (RAU2)</h2>
+                      <p className="text-xs text-slate-400">
+                        Kliknij w komórkę grupy lub komentarza w tabeli, aby edytować ją natychmiast (Inline Edit) bez przeładowania strony.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        onClick={triggerQuickOutlookBCC}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow transition"
+                      >
+                        <Icon name="send" className="w-3.5 h-3.5" />
+                        <span>Otwórz w Outlook ({selectedStudentIds.length > 0 ? selectedStudentIds.length : students.length} BCC)</span>
+                      </button>
+
+                      <button
+                        onClick={() => setIsMailModalOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white shadow transition"
+                      >
+                        <Icon name="mail" className="w-3.5 h-3.5" />
+                        <span>Wyślij Mail (SMTP)</span>
+                      </button>
+
+                      {/* Przycisk przełączania widoczności paska Importu z Excela */}
+                      {canEdit && (
+                        <button
+                          type="button"
+                          onClick={() => toggleExcelDropzone(!showExcelDropzone)}
+                          className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition ${
+                            showExcelDropzone
+                              ? 'bg-blue-600/20 border-blue-500/40 text-blue-300'
+                              : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
+                          }`}
+                          title="Pokaż lub ukryj pasek wgrywania pliku Excel / CSV"
+                        >
+                          <Icon name="upload" className="w-3.5 h-3.5" />
+                          <span>{showExcelDropzone ? 'Ukryj import Excel' : 'Import Excel / CSV'}</span>
+                        </button>
+                      )}
+
+                      <a
+                        href={`/api/students/export?format=xlsx&grupa=${encodeURIComponent(selectedGroup)}&search=${encodeURIComponent(searchQuery)}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200"
+                      >
+                        <Icon name="download" className="w-3.5 h-3.5" />
+                        <span>Eksport .XLSX</span>
+                      </a>
+                      <a
+                        href={`/api/students/export?format=csv&grupa=${encodeURIComponent(selectedGroup)}&search=${encodeURIComponent(searchQuery)}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200"
+                      >
+                        <Icon name="download" className="w-3.5 h-3.5" />
+                        <span>Eksport .CSV</span>
+                      </a>
+
+                      {canEdit && (
+                        <button
+                          onClick={() => setShowAddStudentForm(!showAddStudentForm)}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                        >
+                          <Icon name="plus" className="w-3.5 h-3.5" />
+                          <span>Dodaj Studenta</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Formularz dodawania pojedynczego studenta */}
+                  {showAddStudentForm && canEdit && (
+                    <form onSubmit={handleCreateStudent} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-6 gap-3">
+                      <input
+                        type="text"
+                        required
+                        placeholder="Imię"
+                        value={newStudent.imie}
+                        onChange={(e) => setNewStudent({ ...newStudent, imie: e.target.value })}
+                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                      />
+                      <input
+                        type="text"
+                        required
+                        placeholder="Nazwisko"
+                        value={newStudent.nazwisko}
+                        onChange={(e) => setNewStudent({ ...newStudent, nazwisko: e.target.value })}
+                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                      />
+                      <input
+                        type="email"
+                        required
+                        placeholder="Email (@student.polsl.pl)"
+                        value={newStudent.email}
+                        onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
+                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white sm:col-span-2"
+                      />
+                      <input
+                        type="text"
+                        required
+                        placeholder="Grupa (np. 1, Lab 2A)"
+                        value={newStudent.grupa}
+                        onChange={(e) => setNewStudent({ ...newStudent, grupa: e.target.value })}
+                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Komentarz (np. IOS)"
+                          value={newStudent.komentarz}
+                          onChange={(e) => setNewStudent({ ...newStudent, komentarz: e.target.value })}
+                          className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                        />
+                        <button type="submit" className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
+                          Zapisz
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* Ukrywana strefa Drag & Drop Importu z Excela (.xlsx / .csv) */}
+                  {canEdit && showExcelDropzone && (
+                    <div
+                      onDragOver={(e) => { e.preventDefault(); setIsDraggingFile(true); }}
+                      onDragLeave={() => setIsDraggingFile(false)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setIsDraggingFile(false);
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          handleFileUpload(e.dataTransfer.files[0]);
+                        }
+                      }}
+                      className={`p-3.5 rounded-xl border border-dashed transition flex flex-wrap items-center justify-between gap-4 ${
+                        isDraggingFile
+                          ? 'border-blue-500 bg-blue-500/10'
+                          : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                          <Icon name="upload" className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold text-slate-200">
+                            Przeciągnij i upuść plik <code className="text-blue-400">.xlsx</code> lub <code className="text-blue-400">.csv</code> z listą studentów
+                          </p>
+                          <p className="text-[11px] text-slate-400">
+                            Kolumny: <strong className="text-slate-300">Imie, Nazwisko, Email, Grupa, Komentarz</strong>. Duplikaty po adresie email są aktualizowane.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200">
+                          <Icon name="upload" className="w-3.5 h-3.5" />
+                          <span>Wybierz plik z dysku</span>
+                          <input
+                            type="file"
+                            accept=".xlsx,.csv"
+                            className="hidden"
+                            onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => toggleExcelDropzone(false)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs border border-slate-800 transition"
+                          title="Ukryj ten pasek (możesz go ponownie otworzyć przyciskiem 'Import Excel / CSV')"
+                        >
+                          <Icon name="eyeOff" className="w-3.5 h-3.5" />
+                          <span>Ukryj</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {importReport && (
+                    <div className="p-3.5 rounded-xl bg-slate-950 border border-blue-500/40 text-xs space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-blue-300">
+                          Raport Importu: Dodano nowych: {importReport.inserted} | Zaktualizowano (duplikaty email): {importReport.updated} | Pominięto: {importReport.skipped}
+                        </span>
+                        <button onClick={() => setImportReport(null)} className="text-slate-400 hover:text-white">
+                          <Icon name="close" className="w-4 h-4" />
+                        </button>
+                      </div>
+                      {importReport.errors?.length > 0 && (
+                        <ul className="list-disc list-inside text-amber-300 mt-1">
+                          {importReport.errors.map((err, i) => <li key={i}>{err}</li>)}
+                        </ul>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Filtrowanie po grupach + Wyszukiwarka tekstowa */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-slate-800/80">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-xs text-slate-400 mr-1 font-medium">Grupa:</span>
+                      <button
+                        onClick={() => setSelectedGroup('ALL')}
+                        className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+                          selectedGroup === 'ALL'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                        }`}
+                      >
+                        Wszystkie
+                      </button>
+                      {allGroupsList.map((g) => (
+                        <button
+                          key={g}
+                          onClick={() => setSelectedGroup(g)}
+                          className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+                            selectedGroup === g
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                          }`}
+                        >
+                          Grupa {g}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="relative flex-1 max-w-md min-w-[240px]">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Szukaj po nazwisku, imieniu, emailu lub komentarzu (np. IOS, starosta)..."
+                        className="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none text-xs text-white"
+                      />
+                      <span className="absolute left-3 top-2.5 text-slate-500">
+                        <Icon name="search" className="w-3.5 h-3.5" />
+                      </span>
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
+                        >
+                          <Icon name="close" className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Pasek Akcji Masowych (Bulk Actions) */}
+                  {canEdit && selectedStudentIds.length > 0 && (
+                    <form onSubmit={handleBulkExecute} className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/40 flex flex-wrap items-center justify-between gap-3">
+                      <span className="text-xs font-semibold text-indigo-200">
+                        Zaznaczono: {selectedStudentIds.length} studentów
+                      </span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <select
+                          value={bulkAction}
+                          onChange={(e) => setBulkAction(e.target.value)}
+                          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                        >
+                          <option value="SET_GROUP">Zmień grupę na...</option>
+                          <option value="APPEND_COMMENT">Dopisz do komentarza...</option>
+                          <option value="CLEAR_COMMENT">Wyczyść komentarze</option>
+                          <option value="DELETE">Usuń zaznaczonych</option>
+                        </select>
+                        {(bulkAction === 'SET_GROUP' || bulkAction === 'APPEND_COMMENT') && (
+                          <input
+                            type="text"
+                            required
+                            placeholder={bulkAction === 'SET_GROUP' ? 'Nowa grupa (np. 2)' : 'Notatka (np. rozliczony)'}
+                            value={bulkValue}
+                            onChange={(e) => setBulkValue(e.target.value)}
+                            className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                          />
+                        )}
+                        <button
+                          type="submit"
+                          className="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white"
+                        >
+                          Wykonaj dla zaznaczonych
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+
+                {/* Tabela Studentów z Edycją Inline */}
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-950/90 border-b border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                          <th className="p-3.5 w-10">
+                            <input
+                              type="checkbox"
+                              checked={students.length > 0 && selectedStudentIds.length === students.length}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedStudentIds(students.map((s) => s.id));
+                                } else {
+                                  setSelectedStudentIds([]);
+                                }
+                              }}
+                              className="rounded bg-slate-900 border-slate-700"
+                            />
+                          </th>
+                          <th className="p-3.5">Nazwisko i Imię</th>
+                          <th className="p-3.5">Email Uczelniany</th>
+                          <th className="p-3.5 w-36">Grupa (Inline)</th>
+                          <th className="p-3.5">Komentarz / Status (Inline)</th>
+                          {canEdit && <th className="p-3.5 text-right w-24">Akcje</th>}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/70 text-xs">
+                        {students.length === 0 ? (
+                          <tr>
+                            <td colSpan="6" className="p-8 text-center text-slate-500">
+                              Brak studentów spełniających kryteria wyszukiwania. Kliknij "Import Excel / CSV" lub dodaj studenta ręcznie.
+                            </td>
+                          </tr>
+                        ) : (
+                          students.map((st) => (
+                            <StudentRow
+                              key={st.id}
+                              student={st}
+                              selected={selectedStudentIds.includes(st.id)}
+                              onToggleSelect={() => {
+                                setSelectedStudentIds((prev) =>
+                                  prev.includes(st.id) ? prev.filter((id) => id !== st.id) : [...prev, st.id]
+                                );
+                              }}
+                              canEdit={canEdit}
+                              onInlineUpdate={handleInlineUpdate}
+                              onDelete={() => handleDeleteStudent(st.id)}
+                            />
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* ==================== ZAKŁADKA 4: PRZEDMIOTY RAU2 & KALENDARZE .ICS ==================== */}
+            {activeTab === 'rau2' && (
+              <Rau2AndCalendarModule
+                courses={courses}
+                feeds={feeds}
+                canEdit={canEdit}
+                onRefresh={loadAllData}
+                showToast={showToast}
+              />
+            )}
+
+            {/* ==================== ZAKŁADKA 5: ZARZĄDZANIE UŻYTKOWNIKAMI (TYLKO ADMIN) ==================== */}
+            {activeTab === 'users' && isAdmin && (
+              <UserManagementModule
+                users={usersList}
+                currentAdminId={user.id}
+                onRefresh={loadAllData}
+                showToast={showToast}
+              />
+            )}
+          </main>
+
+          {/* MODAL POCZTY */}
+          <MailModal
+            isOpen={isMailModalOpen}
+            onClose={() => setIsMailModalOpen(false)}
+            recipients={mailRecipients}
+            selectedGroup={selectedGroup}
+            mailConfig={mailConfig}
+            showToast={showToast}
+          />
+
+          {/* MODAL PROFILU I ZDJĘCIA PROFILOWEGO */}
+          <ProfileModal
+            isOpen={isProfileModalOpen}
+            onClose={() => setIsProfileModalOpen(false)}
+            user={user}
+            onUserUpdated={(updated) => setUser(updated)}
+            showToast={showToast}
+          />
+        </div>
+      );
+    }
+
+    // ==================== WIERSZ STUDENTA Z EDYCJĄ INLINE ====================
+    function StudentRow({ student, selected, onToggleSelect, canEdit, onInlineUpdate, onDelete }) {
+      const [grupaVal, setGrupaVal] = useState(student.grupa);
+      const [komentarzVal, setKomentarzVal] = useState(student.komentarz || '');
+
+      useEffect(() => {
+        setGrupaVal(student.grupa);
+        setKomentarzVal(student.komentarz || '');
+      }, [student.grupa, student.komentarz]);
+
+      return (
+        <tr className={`hover:bg-slate-800/40 transition ${selected ? 'bg-blue-950/25' : ''}`}>
+          <td className="p-3.5">
+            <input
+              type="checkbox"
+              checked={selected}
+              onChange={onToggleSelect}
+              className="rounded bg-slate-900 border-slate-700"
+            />
+          </td>
+          <td className="p-3.5 font-semibold text-white">
+            {student.nazwisko} {student.imie}
+          </td>
+          <td className="p-3.5 text-slate-300 font-mono text-[11px]">
+            <a href={`mailto:${student.email}`} className="hover:text-blue-400 underline decoration-slate-700">
+              {student.email}
+            </a>
+          </td>
+          <td className="p-3.5">
+            {canEdit ? (
+              <input
+                type="text"
+                value={grupaVal}
+                onChange={(e) => setGrupaVal(e.target.value)}
+                onBlur={() => onInlineUpdate(student.id, 'grupa', grupaVal)}
+                onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+                className="w-24 px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-700 focus:border-blue-500 focus:outline-none text-xs font-semibold text-blue-300"
+              />
+            ) : (
+              <span className="px-2.5 py-1 rounded-lg bg-slate-800 text-blue-300 font-semibold">
+                {student.grupa}
+              </span>
+            )}
+          </td>
+          <td className="p-3.5">
+            {canEdit ? (
+              <input
+                type="text"
+                value={komentarzVal}
+                placeholder="Dodaj notatkę (np. starosta grupy, IOS, rozliczony)..."
+                onChange={(e) => setKomentarzVal(e.target.value)}
+                onBlur={() => onInlineUpdate(student.id, 'komentarz', komentarzVal)}
+                onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+                className="w-full px-2.5 py-1 rounded-lg bg-slate-950/80 border border-transparent hover:border-slate-700 focus:border-blue-500 focus:bg-slate-950 focus:outline-none text-xs text-slate-200"
+              />
+            ) : (
+              <span className="text-slate-400">{student.komentarz || '—'}</span>
+            )}
+          </td>
+          {canEdit && (
+            <td className="p-3.5 text-right">
+              <button
+                onClick={onDelete}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/25 text-rose-400 text-[11px] font-semibold transition"
+              >
+                <Icon name="trash" className="w-3 h-3" />
+                <span>Usuń</span>
+              </button>
+            </td>
+          )}
+        </tr>
+      );
+    }
+
+    // ==================== MODUŁ OŚ CZASU (TYLKO KOLOKWIA, EGZAMINY, DEADLINE'Y) & TABLICA OGŁOSZEŃ ====================
+    function DashboardTimelineAndAnnouncements({ events, announcements, allGroupsList, canEdit, onRefresh, onOpenCalendarTab, showToast }) {
+      const [categoryFilter, setCategoryFilter] = useState('ALL');
+      const [showEventModal, setShowEventModal] = useState(false);
+      const [newEvent, setNewEvent] = useState({
+        title: '', description: '', location: '', start_time: '', category: 'KOLOKWIUM', target_group: 'Wszystkie'
+      });
+
+      const [showAnnForm, setShowAnnForm] = useState(false);
+      const [newAnn, setNewAnn] = useState({
+        title: '', content: '', priority: 'HIGH', due_date: '', course_name: ''
+      });
+
+      const filteredEvents = useMemo(() => {
+        if (categoryFilter === 'ALL') return events;
+        return events.filter((e) => e.category === categoryFilter);
+      }, [events, categoryFilter]);
+
+      const handleCreateEvent = async (e) => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/calendar/events', {
+            method: 'POST',
+            body: JSON.stringify({
+              ...newEvent,
+              start_time: new Date(newEvent.start_time).toISOString()
+            })
+          });
+          setShowEventModal(false);
+          setNewEvent({ title: '', description: '', location: '', start_time: '', category: 'KOLOKWIUM', target_group: 'Wszystkie' });
+          showToast('Dodano nowy termin do wspólnej osi czasu.');
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleCreateAnnouncement = async (e) => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/announcements', {
+            method: 'POST',
+            body: JSON.stringify({
+              ...newAnn,
+              due_date: newAnn.due_date ? new Date(newAnn.due_date).toISOString() : null
+            })
+          });
+          setShowAnnForm(false);
+          setNewAnn({ title: '', content: '', priority: 'HIGH', due_date: '', course_name: '' });
+          showToast('Dodano nowe ogłoszenie / zadanie dla roku.');
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const toggleGroupCompletion = async (annId, groupName) => {
+        if (!canEdit) return;
+        try {
+          await apiFetch(`/api/announcements/${annId}/toggle-group`, {
+            method: 'POST',
+            body: JSON.stringify({ group_name: groupName })
+          });
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* LEWA KOLUMNA: WSPÓLNA OŚ CZASU (KOLOKWIA, EGZAMINY, DEADLINE'Y RAU2) */}
+          <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  <Icon name="timeline" className="w-4 h-4 text-blue-400" />
+                  <span>Wspólna Oś Czasu (Kolokwia, Egzaminy & Deadline'y RAU2)</span>
+                </h2>
+                <p className="text-xs text-slate-400">
+                  Zwykłe zajęcia z USOSa (wykłady, laboratoria, lektoraty) są odfiltrowane i rozłożone w zakładce{' '}
+                  <button onClick={onOpenCalendarTab} className="text-blue-400 hover:underline font-semibold">
+                    Kalendarz Zajęć
+                  </button>.
+                </p>
+              </div>
+              {canEdit && (
+                <button
+                  onClick={() => setShowEventModal(!showEventModal)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                >
+                  <Icon name="plus" className="w-3.5 h-3.5" />
+                  <span>Dodaj Termin</span>
+                </button>
+              )}
+            </div>
+
+            {showEventModal && canEdit && (
+              <form onSubmit={handleCreateEvent} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Tytuł (np. Kolokwium Sztuczna Inteligencja)"
+                    value={newEvent.title}
+                    onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                  <input
+                    type="datetime-local"
+                    required
+                    value={newEvent.start_time}
+                    onChange={(e) => setNewEvent({ ...newEvent, start_time: e.target.value })}
+                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                  <select
+                    value={newEvent.category}
+                    onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })}
+                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  >
+                    <option value="KOLOKWIUM">KOLOKWIUM</option>
+                    <option value="EGZAMIN">EGZAMIN</option>
+                    <option value="DEADLINE_RAU2">DEADLINE_RAU2 (Moodle)</option>
+                    <option value="INNE">WAŻNE WYDARZENIE / ZMIANA</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Sala / Miejsce (np. Aula B AEiI / RAU2)"
+                    value={newEvent.location}
+                    onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                </div>
+                <textarea
+                  rows="2"
+                  placeholder="Zakres materiału lub dodatkowe uwagi..."
+                  value={newEvent.description}
+                  onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <div className="flex justify-end gap-2">
+                  <button type="button" onClick={() => setShowEventModal(false)} className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">
+                    Anuluj
+                  </button>
+                  <button type="submit" className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white font-semibold">
+                    Zapisz wydarzenie
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Filtry kategorii Osi Czasu (bez zwykłych zajęć) */}
+            <div className="flex flex-wrap gap-1.5">
+              {['ALL', 'KOLOKWIUM', 'EGZAMIN', 'DEADLINE_RAU2', 'INNE'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setCategoryFilter(cat)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
+                    categoryFilter === cat
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
+                  }`}
+                >
+                  {cat === 'ALL' ? 'Wszystkie ważne terminy' : cat}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+              {filteredEvents.length === 0 ? (
+                <div className="p-8 text-center text-xs text-slate-500">
+                  Brak kolokwiów, egzaminów ani deadline'ów w tej kategorii.
+                </div>
+              ) : (
+                filteredEvents.map((ev) => (
+                  <div key={ev.id} className="p-4 rounded-xl bg-slate-950/90 border border-slate-800/90 hover:border-slate-700 flex items-start justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <CategoryBadge category={ev.category} />
+                        <span className="text-xs font-bold text-blue-400 inline-flex items-center gap-1">
+                          <Icon name="clock" className="w-3.5 h-3.5" />
+                          <span>{formatDateTime(ev.start_time)}</span>
+                        </span>
+                        <span className="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
+                          Źródło: {ev.source_label}
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white pt-0.5">{ev.title}</h4>
+                      {ev.description && <p className="text-xs text-slate-400">{ev.description}</p>}
+                      {ev.location && (
+                        <p className="text-[11px] text-slate-500 inline-flex items-center gap-1">
+                          <Icon name="mapPin" className="w-3 h-3" />
+                          <span>Miejsce: {ev.location} • Grupa: {ev.target_group}</span>
+                        </p>
+                      )}
+                    </div>
+                    {canEdit && (
+                      <button
+                        onClick={async () => {
+                          await apiFetch(`/api/calendar/events/${ev.id}`, { method: 'DELETE' });
+                          onRefresh();
+                        }}
+                        className="text-slate-500 hover:text-rose-400 p-1"
+                        title="Usuń termin"
+                      >
+                        <Icon name="close" className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* PRAWA KOLUMNA: TABLICA OGŁOSZEŃ I ŚLEDZENIE DEADLINÓW GRUP */}
+          <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  <Icon name="pin" className="w-4 h-4 text-emerald-400" />
+                  <span>Tablica Ogłoszeń & Realizacja Grup</span>
+                </h2>
+                <p className="text-xs text-slate-400">
+                  Kliknij numer grupy przy zadaniu, aby oznaczyć jego realizację.
+                </p>
+              </div>
+              {canEdit && (
+                <button
+                  onClick={() => setShowAnnForm(!showAnnForm)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white"
+                >
+                  <Icon name="plus" className="w-3.5 h-3.5" />
+                  <span>Nowe Zadanie</span>
+                </button>
+              )}
+            </div>
+
+            {showAnnForm && canEdit && (
+              <form onSubmit={handleCreateAnnouncement} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
+                <input
+                  type="text"
+                  required
+                  placeholder="Tytuł ogłoszenia / zadania dla roku"
+                  value={newAnn.title}
+                  onChange={(e) => setNewAnn({ ...newAnn, title: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="Przedmiot (np. Sztuczna Inteligencja)"
+                    value={newAnn.course_name}
+                    onChange={(e) => setNewAnn({ ...newAnn, course_name: e.target.value })}
+                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                  <input
+                    type="datetime-local"
+                    value={newAnn.due_date}
+                    onChange={(e) => setNewAnn({ ...newAnn, due_date: e.target.value })}
+                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                </div>
+                <textarea
+                  rows="2"
+                  placeholder="Szczegółowa instrukcja dla starostów grup i studentów..."
+                  value={newAnn.content}
+                  onChange={(e) => setNewAnn({ ...newAnn, content: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <div className="flex justify-end gap-2">
+                  <button type="button" onClick={() => setShowAnnForm(false)} className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">
+                    Anuluj
+                  </button>
+                  <button type="submit" className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white font-semibold">
+                    Opublikuj
+                  </button>
+                </div>
+              </form>
+            )}
+
+            <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+              {announcements.map((ann) => {
+                const completed = (ann.completed_groups || '').split(',').map((g) => g.trim()).filter(Boolean);
+                return (
+                  <div key={ann.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
+                          ann.priority === 'CRITICAL'
+                            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                            : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                        }`}>
+                          {ann.priority}
+                        </span>
+                        {ann.course_name && (
+                          <span className="ml-2 text-xs text-slate-400 font-medium">{ann.course_name}</span>
+                        )}
+                        <h4 className="text-sm font-bold text-white mt-1">{ann.title}</h4>
+                      </div>
+                      {canEdit && (
+                        <button
+                          onClick={async () => {
+                            await apiFetch(`/api/announcements/${ann.id}`, { method: 'DELETE' });
+                            onRefresh();
+                          }}
+                          className="text-slate-500 hover:text-rose-400 p-1"
+                        >
+                          <Icon name="close" className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+
+                    {ann.content && <p className="text-xs text-slate-300 leading-relaxed">{ann.content}</p>}
+
+                    {ann.due_date && (
+                      <p className="text-[11px] text-amber-400 font-medium inline-flex items-center gap-1">
+                        <Icon name="clock" className="w-3.5 h-3.5" />
+                        <span>Termin wykonania: {formatDateTime(ann.due_date)}</span>
+                      </p>
+                    )}
+
+                    <div className="pt-2 border-t border-slate-800/80">
+                      <span className="block text-[11px] text-slate-400 mb-1.5">
+                        Status rozliczenia grup (kliknij, aby przełączyć):
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {allGroupsList.map((grp) => {
+                          const isDone = completed.includes(grp);
+                          return (
+                            <button
+                              key={grp}
+                              type="button"
+                              onClick={() => toggleGroupCompletion(ann.id, grp)}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition inline-flex items-center gap-1.5 ${
+                                isDone
+                                  ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
+                                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                              }`}
+                            >
+                              <Icon name={isDone ? 'check' : 'circle'} className="w-3 h-3" />
+                              <span>Grupa {grp}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== NOWA ZAKŁADKA: KALENDARZ ZAJĘĆ (ROZKŁAD PRZEDMIOTÓW Z USOS & RAU2) ====================
+    function ScheduleCalendarView({ events, courses, allGroupsList, canEdit, onRefresh, showToast }) {
+      const [viewMode, setViewMode] = useState('week'); // 'week' | 'month'
+      const [referenceDate, setReferenceDate] = useState(() => new Date());
+      const [groupFilter, setGroupFilter] = useState('ALL');
+      const [typeFilter, setTypeFilter] = useState('ALL');
+      const [showAddClassModal, setShowAddClassModal] = useState(false);
+      const [newClass, setNewClass] = useState({
+        title: '',
+        category: 'WYKLAD',
+        location: '',
+        start_time: '',
+        end_time: '',
+        target_group: 'Wszystkie',
+        description: ''
+      });
+
+      // Wyznaczanie poniedziałku aktualnie wybranego tygodnia
+      const startOfWeek = useMemo(() => {
+        const d = new Date(referenceDate);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        const monday = new Date(d.setDate(diff));
+        monday.setHours(0, 0, 0, 0);
+        return monday;
+      }, [referenceDate]);
+
+      const weekDays = useMemo(() => {
+        const days = [];
+        const labels = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'];
+        for (let i = 0; i < 7; i++) {
+          const dt = new Date(startOfWeek);
+          dt.setDate(startOfWeek.getDate() + i);
+          days.push({ date: dt, label: labels[i] });
+        }
+        return days;
+      }, [startOfWeek]);
+
+      // Dni do siatki miesięcznej
+      const monthDays = useMemo(() => {
+        const year = referenceDate.getFullYear();
+        const month = referenceDate.getMonth();
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+
+        const startOffset = (firstDayOfMonth.getDay() + 6) % 7; // Poniedziałek = 0
+        const gridStart = new Date(firstDayOfMonth);
+        gridStart.setDate(firstDayOfMonth.getDate() - startOffset);
+
+        const cells = [];
+        for (let i = 0; i < 42; i++) {
+          const d = new Date(gridStart);
+          d.setDate(gridStart.getDate() + i);
+          cells.push({
+            date: d,
+            isCurrentMonth: d.getMonth() === month
+          });
+        }
+        return cells;
+      }, [referenceDate]);
+
+      const filteredScheduleEvents = useMemo(() => {
+        return events.filter((ev) => {
+          if (groupFilter !== 'ALL' && ev.target_group !== 'Wszystkie' && ev.target_group !== groupFilter) {
+            return false;
+          }
+          if (typeFilter !== 'ALL' && ev.category !== typeFilter) {
+            return false;
+          }
+          return true;
+        });
+      }, [events, groupFilter, typeFilter]);
+
+      const navigatePeriod = (direction) => {
+        const next = new Date(referenceDate);
+        if (viewMode === 'week') {
+          next.setDate(next.getDate() + direction * 7);
+        } else {
+          next.setMonth(next.getMonth() + direction);
+        }
+        setReferenceDate(next);
+      };
+
+      const isSameDay = (d1, d2) =>
+        d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
+
+      const getCardStyle = (category) => {
+        const styles = {
+          WYKLAD: 'bg-sky-500/15 border-sky-500/40 text-sky-200',
+          LAB: 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200',
+          LEKTORAT: 'bg-teal-500/15 border-teal-500/40 text-teal-200',
+          CWICZENIA: 'bg-cyan-500/15 border-cyan-500/40 text-cyan-200',
+          PROJEKT: 'bg-indigo-500/15 border-indigo-500/40 text-indigo-200',
+          KOLOKWIUM: 'bg-amber-500/20 border-amber-500/50 text-amber-200',
+          EGZAMIN: 'bg-rose-500/20 border-rose-500/50 text-rose-200',
+          DEADLINE_RAU2: 'bg-purple-500/20 border-purple-500/50 text-purple-200'
+        };
+        return styles[category] || 'bg-slate-800 border-slate-700 text-slate-200';
+      };
+
+      const handleCreateClassEvent = async (e) => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/calendar/events', {
+            method: 'POST',
+            body: JSON.stringify({
+              ...newClass,
+              start_time: new Date(newClass.start_time).toISOString(),
+              end_time: newClass.end_time ? new Date(newClass.end_time).toISOString() : null,
+              source_label: 'Plan USOS / RAU2'
+            })
+          });
+          setShowAddClassModal(false);
+          setNewClass({
+            title: '', category: 'WYKLAD', location: '', start_time: '', end_time: '', target_group: 'Wszystkie', description: ''
+          });
+          showToast('Dodano zajęcia do siatki kalendarza.');
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      return (
+        <section className="space-y-5">
+          {/* Pasek sterowania kalendarzem */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Icon name="calendar" className="w-5 h-5 text-blue-400" />
+                  <span>Kalendarz Zajęć i Przedmiotów (USOSweb & RAU2)</span>
+                </h2>
+                <p className="text-xs text-slate-400">
+                  Rozkład wykładów, laboratoriów, lektoratów, projektów oraz terminów zaliczeń pobranych z plików .ics USOSweb.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Przełącznik Tydzień / Miesiąc */}
+                <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+                  <button
+                    onClick={() => setViewMode('week')}
+                    className={`px-3 py-1.5 rounded-lg transition ${
+                      viewMode === 'week' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Widok Tygodniowy
+                  </button>
+                  <button
+                    onClick={() => setViewMode('month')}
+                    className={`px-3 py-1.5 rounded-lg transition ${
+                      viewMode === 'month' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Widok Miesięczny
+                  </button>
+                </div>
+
+                {/* Nawigacja dat */}
+                <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                  <button
+                    onClick={() => navigatePeriod(-1)}
+                    className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300"
+                    title="Poprzedni okres"
+                  >
+                    <Icon name="chevronLeft" className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setReferenceDate(new Date())}
+                    className="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white"
+                  >
+                    Dzisiaj
+                  </button>
+                  <button
+                    onClick={() => navigatePeriod(1)}
+                    className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300"
+                    title="Następny okres"
+                  >
+                    <Icon name="chevronRight" className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {canEdit && (
+                  <button
+                    onClick={() => setShowAddClassModal(!showAddClassModal)}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                  >
+                    <Icon name="plus" className="w-3.5 h-3.5" />
+                    <span>Dodaj Zajęcia do Kalendarza</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Formularz ręcznego dodawania zajęć do siatki kalendarza */}
+            {showAddClassModal && canEdit && (
+              <form onSubmit={handleCreateClassEvent} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <input
+                  type="text"
+                  required
+                  placeholder="Przedmiot / Nazwa zajęć"
+                  value={newClass.title}
+                  onChange={(e) => setNewClass({ ...newClass, title: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <select
+                  value={newClass.category}
+                  onChange={(e) => setNewClass({ ...newClass, category: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                >
+                  <option value="WYKLAD">WYKŁAD</option>
+                  <option value="LAB">LABORATORIUM</option>
+                  <option value="LEKTORAT">LEKTORAT</option>
+                  <option value="CWICZENIA">ĆWICZENIA</option>
+                  <option value="PROJEKT">PROJEKT</option>
+                  <option value="KOLOKWIUM">KOLOKWIUM</option>
+                  <option value="EGZAMIN">EGZAMIN</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Sala / Budynek (np. AEiI Sala 214)"
+                  value={newClass.location}
+                  onChange={(e) => setNewClass({ ...newClass, location: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <div>
+                  <label className="block text-[10px] text-slate-400 mb-1">Początek zajęć</label>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={newClass.start_time}
+                    onChange={(e) => setNewClass({ ...newClass, start_time: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] text-slate-400 mb-1">Koniec zajęć (opcjonalnie)</label>
+                  <input
+                    type="datetime-local"
+                    value={newClass.end_time}
+                    onChange={(e) => setNewClass({ ...newClass, end_time: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] text-slate-400 mb-1">Grupa docelowa</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Wszystkie lub np. 1"
+                      value={newClass.target_group}
+                      onChange={(e) => setNewClass({ ...newClass, target_group: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    />
+                    <button type="submit" className="px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold">
+                      Zapisz
+                    </button>
+                  </div>
+                </div>
+              </form>
+            )}
+
+            {/* Filtry typu zajęć i grup */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80 text-xs">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-slate-400 mr-1">Typ zajęć:</span>
+                {['ALL', 'WYKLAD', 'LAB', 'LEKTORAT', 'CWICZENIA', 'PROJEKT', 'KOLOKWIUM', 'EGZAMIN'].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTypeFilter(t)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
+                      typeFilter === t
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
+                    }`}
+                  >
+                    {t === 'ALL' ? 'Wszystkie' : t}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-slate-400">Grupa:</span>
+                <select
+                  value={groupFilter}
+                  onChange={(e) => setGroupFilter(e.target.value)}
+                  className="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-white text-xs"
+                >
+                  <option value="ALL">Wszystkie grupy</option>
+                  {allGroupsList.map((g) => (
+                    <option key={g} value={g}>Grupa {g}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* SIATKA TYGODNIOWA (ROZKŁAD PRZEDMIOTÓW NA DNI TYGODNIA) */}
+          {viewMode === 'week' ? (
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+              <div className="px-5 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-200">
+                  Tydzień: {weekDays[0].date.toLocaleDateString('pl-PL')} — {weekDays[6].date.toLocaleDateString('pl-PL')}
+                </span>
+                <span className="text-slate-400">
+                  Łącznie wydarzeń w filtrze: {filteredScheduleEvents.length}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-7 divide-y md:divide-y-0 md:divide-x divide-slate-800 min-h-[480px]">
+                {weekDays.map((dayObj, idx) => {
+                  const dayEvents = filteredScheduleEvents
+                    .filter((ev) => isSameDay(new Date(ev.start_time), dayObj.date))
+                    .sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+                  const isToday = isSameDay(dayObj.date, new Date());
+
+                  return (
+                    <div key={idx} className={`flex flex-col ${isToday ? 'bg-blue-950/15' : ''}`}>
+                      <div className={`p-3 border-b border-slate-800 text-center ${isToday ? 'bg-blue-600/20' : 'bg-slate-950/60'}`}>
+                        <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                          {dayObj.label}
+                        </div>
+                        <div className={`text-sm font-bold mt-0.5 ${isToday ? 'text-blue-400' : 'text-white'}`}>
+                          {dayObj.date.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit' })}
+                        </div>
+                      </div>
+
+                      <div className="p-2.5 space-y-2.5 flex-1">
+                        {dayEvents.length === 0 ? (
+                          <div className="h-full flex items-center justify-center text-[11px] text-slate-600 py-8">
+                            Brak zajęć
+                          </div>
+                        ) : (
+                          dayEvents.map((ev) => (
+                            <div
+                              key={ev.id}
+                              className={`p-2.5 rounded-xl border text-xs space-y-1.5 relative group transition hover:brightness-110 ${getCardStyle(ev.category)}`}
+                            >
+                              <div className="flex items-center justify-between gap-1">
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-black/30">
+                                  {ev.category}
+                                </span>
+                                <span className="text-[11px] font-mono font-semibold">
+                                  {formatTimeShort(ev.start_time)}
+                                  {ev.end_time ? ` - ${formatTimeShort(ev.end_time)}` : ''}
+                                </span>
+                              </div>
+                              <div className="font-bold text-white leading-snug">{ev.title}</div>
+                              {ev.location && (
+                                <div className="text-[11px] opacity-85 flex items-center gap-1">
+                                  <Icon name="mapPin" className="w-3 h-3 shrink-0" />
+                                  <span className="truncate">{ev.location}</span>
+                                </div>
+                              )}
+                              <div className="text-[10px] opacity-75">
+                                Grupa: {ev.target_group}
+                              </div>
+                              {canEdit && (
+                                <button
+                                  onClick={async () => {
+                                    await apiFetch(`/api/calendar/events/${ev.id}`, { method: 'DELETE' });
+                                    onRefresh();
+                                  }}
+                                  className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 p-1 rounded bg-black/50 text-rose-300 hover:text-rose-200 transition"
+                                  title="Usuń z kalendarza"
+                                >
+                                  <Icon name="close" className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* SIATKA MIESIĘCZNA */
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+              <div className="px-5 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs">
+                <span className="font-bold text-white uppercase tracking-wider">
+                  {referenceDate.toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' })}
+                </span>
+                <span className="text-slate-400">Widok miesięczny rozkładu przedmiotów</span>
+              </div>
+
+              <div className="grid grid-cols-7 bg-slate-950 border-b border-slate-800 text-[11px] font-semibold uppercase text-slate-400 text-center py-2">
+                <div>Pon</div><div>Wt</div><div>Śr</div><div>Czw</div><div>Pt</div><div>Sob</div><div>Ndz</div>
+              </div>
+
+              <div className="grid grid-cols-7 divide-x divide-y divide-slate-800">
+                {monthDays.map((cell, i) => {
+                  const dayEvents = filteredScheduleEvents.filter((ev) =>
+                    isSameDay(new Date(ev.start_time), cell.date)
+                  );
+                  const isToday = isSameDay(cell.date, new Date());
+
+                  return (
+                    <div
+                      key={i}
+                      className={`min-h-[115px] p-2 flex flex-col gap-1 ${
+                        cell.isCurrentMonth ? 'bg-slate-900' : 'bg-slate-950/60 opacity-50'
+                      } ${isToday ? 'ring-1 ring-inset ring-blue-500 bg-blue-950/20' : ''}`}
+                    >
+                      <div className="flex items-center justify-between text-xs font-bold">
+                        <span className={isToday ? 'text-blue-400' : 'text-slate-300'}>
+                          {cell.date.getDate()}
+                        </span>
+                        {dayEvents.length > 0 && (
+                          <span className="text-[10px] px-1.5 rounded bg-slate-800 text-slate-400">
+                            {dayEvents.length}
+                          </span>
+                        )}
+                      </div>
+                      <div className="space-y-1 overflow-y-auto max-h-24 pr-0.5">
+                        {dayEvents.map((ev) => (
+                          <div
+                            key={ev.id}
+                            className={`px-1.5 py-1 rounded border text-[10px] truncate ${getCardStyle(ev.category)}`}
+                            title={`${formatTimeShort(ev.start_time)} ${ev.title} (${ev.location})`}
+                          >
+                            <span className="font-mono font-semibold mr-1">{formatTimeShort(ev.start_time)}</span>
+                            <span>{ev.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </section>
+      );
+    }
+
+    // ==================== MODUŁ KATALOGU PRZEDMIOTÓW RAU2 & SUBSKRYPCJI .ICS ====================
+    function Rau2AndCalendarModule({ courses, feeds, canEdit, onRefresh, showToast }) {
+      const [newCourse, setNewCourse] = useState({
+        code: '', name: '', lecturer: '', rau2_url: 'https://platforma.polsl.pl/rau2/course/view.php?id=',
+        usos_url: '', passing_rules: '', assigned_groups: 'Wszystkie', ects: 4
+      });
+      const [showCourseForm, setShowCourseForm] = useState(false);
+
+      const [newFeed, setNewFeed] = useState({
+        name: '', source_type: 'RAU2_MOODLE', ics_url: '', target_group: 'Wszystkie'
+      });
+      const [syncing, setSyncing] = useState(false);
+
+      const handleAddCourse = async (e) => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/courses', {
+            method: 'POST',
+            body: JSON.stringify(newCourse)
+          });
+          setShowCourseForm(false);
+          setNewCourse({
+            code: '', name: '', lecturer: '', rau2_url: 'https://platforma.polsl.pl/rau2/course/view.php?id=',
+            usos_url: '', passing_rules: '', assigned_groups: 'Wszystkie', ects: 4
+          });
+          showToast('Dodano przedmiot do katalogu RAU2 & USOS.');
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleAddFeed = async (e) => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/calendar/feeds', {
+            method: 'POST',
+            body: JSON.stringify(newFeed)
+          });
+          setNewFeed({ name: '', source_type: 'RAU2_MOODLE', ics_url: '', target_group: 'Wszystkie' });
+          showToast('Dodano i zsynchronizowano subskrypcję kalendarza .ics!');
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleUploadIcsFile = async (file) => {
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+          const res = await apiFetch(`/api/calendar/feeds/upload-ics?name=${encodeURIComponent(file.name)}&source_type=USOS`, {
+            method: 'POST',
+            body: formData
+          });
+          showToast(res.message);
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleSyncAll = async () => {
+        setSyncing(true);
+        try {
+          const res = await apiFetch('/api/calendar/sync', { method: 'POST' });
+          showToast(`Zsynchronizowano ${res.synced_feeds} kalendarzy (${res.total_events} wydarzeń).`);
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setSyncing(false);
+        }
+      };
+
+      return (
+        <div className="space-y-6">
+          {/* Katalog Przedmiotów RAU2 & USOSweb */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-bold text-white">Katalog Przedmiotów (Platforma RAU2 & USOSweb)</h2>
+                <p className="text-xs text-slate-400">
+                  Bezpośrednie odnośniki do kursów na <code className="text-blue-400">https://platforma.polsl.pl/rau2</code>, kart przedmiotów w USOS oraz zasad zaliczenia.
+                </p>
+              </div>
+              {canEdit && (
+                <button
+                  onClick={() => setShowCourseForm(!showCourseForm)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                >
+                  <Icon name="plus" className="w-3.5 h-3.5" />
+                  <span>Dodaj Przedmiot RAU2</span>
+                </button>
+              )}
+            </div>
+
+            {showCourseForm && canEdit && (
+              <form onSubmit={handleAddCourse} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <input
+                  type="text"
+                  required
+                  placeholder="Kod przedmiotu (np. RAU2-SI)"
+                  value={newCourse.code}
+                  onChange={(e) => setNewCourse({ ...newCourse, code: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <input
+                  type="text"
+                  required
+                  placeholder="Pełna nazwa przedmiotu"
+                  value={newCourse.name}
+                  onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white sm:col-span-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Prowadzący (np. dr inż. Jan Kowalski)"
+                  value={newCourse.lecturer}
+                  onChange={(e) => setNewCourse({ ...newCourse, lecturer: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <input
+                  type="url"
+                  placeholder="Link do kursu RAU2 (https://platforma.polsl.pl/rau2/course/view.php?id=...)"
+                  value={newCourse.rau2_url}
+                  onChange={(e) => setNewCourse({ ...newCourse, rau2_url: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <input
+                  type="url"
+                  placeholder="Link do karty przedmiotu w USOSweb"
+                  value={newCourse.usos_url}
+                  onChange={(e) => setNewCourse({ ...newCourse, usos_url: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <textarea
+                  rows="2"
+                  placeholder="Zasady zaliczenia, progi punktowe, obecności..."
+                  value={newCourse.passing_rules}
+                  onChange={(e) => setNewCourse({ ...newCourse, passing_rules: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white sm:col-span-2"
+                />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Przypisane grupy"
+                    value={newCourse.assigned_groups}
+                    onChange={(e) => setNewCourse({ ...newCourse, assigned_groups: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                  <button type="submit" className="px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold">
+                    Zapisz
+                  </button>
+                </div>
+              </form>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {courses.map((c) => (
+                <div key={c.id} className="p-5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                        {c.code} • {c.ects} ECTS
+                      </span>
+                      {canEdit && (
+                        <button
+                          onClick={async () => {
+                            await apiFetch(`/api/courses/${c.id}`, { method: 'DELETE' });
+                            onRefresh();
+                          }}
+                          className="text-slate-500 hover:text-rose-400 text-xs inline-flex items-center gap-1"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                          <span>Usuń</span>
+                        </button>
+                      )}
+                    </div>
+                    <h3 className="text-base font-bold text-white">{c.name}</h3>
+                    <p className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <Icon name="user" className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Prowadzący: <strong className="text-slate-200">{c.lecturer || '—'}</strong></span>
+                    </p>
+                    <p className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <Icon name="users" className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Grupy: {c.assigned_groups}</span>
+                    </p>
+                    {c.passing_rules && (
+                      <div className="p-3 rounded-lg bg-slate-900 border border-slate-800/80 text-xs text-slate-300">
+                        <strong className="block text-[11px] uppercase text-slate-400 mb-0.5">Zasady zaliczenia:</strong>
+                        {c.passing_rules}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-800">
+                    {c.rau2_url && (
+                      <a
+                        href={c.rau2_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition"
+                      >
+                        <Icon name="link" className="w-3.5 h-3.5" />
+                        <span>Kurs Moodle RAU2</span>
+                      </a>
+                    )}
+                    {c.usos_url && (
+                      <a
+                        href={c.usos_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition"
+                      >
+                        <Icon name="graduation" className="w-3.5 h-3.5" />
+                        <span>Karta USOSweb</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Agregator Kalendarzy .ics z USOSweb i Moodle RAU2 */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="text-base font-bold text-white">Agregator Subskrypcji Kalendarzy iCal (.ics) — USOSweb & RAU2</h3>
+                <p className="text-xs text-slate-400">
+                  Wykłady, laboratoria i lektoraty z plików .ics trafiają automatycznie do zakładki <strong>Kalendarz Zajęć</strong>, a kolokwia, egzaminy i zadania z Moodle RAU2 również na <strong>Wspólną Oś Czasu</strong>.
+                </p>
+              </div>
+              {canEdit && (
+                <div className="flex items-center gap-2">
+                  <label className="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200">
+                    <Icon name="upload" className="w-3.5 h-3.5" />
+                    <span>Wgraj plik .ics z dysku</span>
+                    <input
+                      type="file"
+                      accept=".ics"
+                      className="hidden"
+                      onChange={(e) => e.target.files?.[0] && handleUploadIcsFile(e.target.files[0])}
+                    />
+                  </label>
+                  <button
+                    onClick={handleSyncAll}
+                    disabled={syncing}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white"
+                  >
+                    <Icon name="refresh" className="w-3.5 h-3.5" />
+                    <span>{syncing ? 'Synchronizacja...' : 'Synchronizuj linki .ics'}</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {canEdit && (
+              <form onSubmit={handleAddFeed} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs">
+                <input
+                  type="text"
+                  required
+                  placeholder="Nazwa (np. Plan USOS RAU2)"
+                  value={newFeed.name}
+                  onChange={(e) => setNewFeed({ ...newFeed, name: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                />
+                <select
+                  value={newFeed.source_type}
+                  onChange={(e) => setNewFeed({ ...newFeed, source_type: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                >
+                  <option value="RAU2_MOODLE">Moodle RAU2 (platforma.polsl.pl/rau2)</option>
+                  <option value="USOS">USOSweb Politechnika Śląska</option>
+                  <option value="CUSTOM">Inny kalendarz .ics</option>
+                </select>
+                <input
+                  type="text"
+                  required
+                  placeholder="URL subskrypcji .ics (https://... lub webcal://...)"
+                  value={newFeed.ics_url}
+                  onChange={(e) => setNewFeed({ ...newFeed, ics_url: e.target.value })}
+                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white sm:col-span-2"
+                />
+                <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold">
+                  <Icon name="plus" className="w-3.5 h-3.5" />
+                  <span>Podepnij Kalendarz</span>
+                </button>
+              </form>
+            )}
+
+            <div className="space-y-2">
+              {feeds.length === 0 ? (
+                <p className="text-xs text-slate-500 py-4 text-center">
+                  Brak podpiętych zewnętrznych linków .ics. Dodaj link powyżej lub wgraj plik .ics.
+                </p>
+              ) : (
+                feeds.map((f) => (
+                  <div key={f.id} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div>
+                      <span className="font-bold text-white">{f.name}</span>
+                      <span className="ml-2 px-2 py-0.5 rounded bg-slate-800 text-blue-300 text-[11px]">{f.source_type}</span>
+                      <p className="text-[11px] text-slate-500 truncate max-w-xl mt-0.5">{f.ics_url}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[11px] text-slate-400">
+                        Ostatnia synchr.: {formatDateTime(f.last_synced_at)}
+                      </span>
+                      {canEdit && (
+                        <button
+                          onClick={async () => {
+                            await apiFetch(`/api/calendar/feeds/${f.id}`, { method: 'DELETE' });
+                            onRefresh();
+                          }}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-rose-500/15 text-rose-300 hover:bg-rose-500/30"
+                        >
+                          <Icon name="trash" className="w-3.5 h-3.5" />
+                          <span>Usuń</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== MODUŁ ZARZĄDZANIA UŻYTKOWNIKAMI (RBAC - TYLKO STAROSTA ROKU) ====================
+    function UserManagementModule({ users, currentAdminId, onRefresh, showToast }) {
+      const [newUser, setNewUser] = useState({
+        email: '', full_name: '', password: '', role: 'GROUP_LEADER', assigned_group: '1'
+      });
+      const [resetPasswords, setResetPasswords] = useState({});
+
+      const handleCreateUser = async (e) => {
+        e.preventDefault();
+        try {
+          await apiFetch('/api/users', {
+            method: 'POST',
+            body: JSON.stringify(newUser)
+          });
+          setNewUser({ email: '', full_name: '', password: '', role: 'GROUP_LEADER', assigned_group: '1' });
+          showToast('Utworzono nowe konto użytkownika.');
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleRoleOrStatusChange = async (userId, patch) => {
+        try {
+          await apiFetch(`/api/users/${userId}`, {
+            method: 'PATCH',
+            body: JSON.stringify(patch)
+          });
+          showToast('Zaktualizowano uprawnienia użytkownika.');
+          onRefresh();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+
+      const handleResetPassword = async (userId) => {
+        const tempPass = resetPasswords[userId];
+        if (!tempPass || tempPass.length < 6) {
+          showToast('Hasło tymczasowe musi mieć co najmniej 6 znaków.', 'error');
+          return;
+        }
+        await handleRoleOrStatusChange(userId, { temporary_password: tempPass });
+        setResetPasswords({ ...resetPasswords, [userId]: '' });
+      };
+
+      return (
+        <div className="space-y-6">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div>
+              <h2 className="text-lg font-bold text-white">Zarządzanie Użytkownikami i Uprawnieniami (RBAC)</h2>
+              <p className="text-xs text-slate-400">
+                Moduł dostępny wyłącznie dla Głównego Administratora (Starosty Roku). Twórz konta dla starostów poszczególnych grup dziekańskich/laboratoryjnych i nadawaj im tymczasowe hasła.
+              </p>
+            </div>
+
+            <form onSubmit={handleCreateUser} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-6 gap-3 text-xs">
+              <input
+                type="text"
+                required
+                placeholder="Imię i Nazwisko (np. Starosta Grupy 2)"
+                value={newUser.full_name}
+                onChange={(e) => setNewUser({ ...newUser, full_name: e.target.value })}
+                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+              />
+              <input
+                type="email"
+                required
+                placeholder="Email (@student.polsl.pl)"
+                value={newUser.email}
+                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+              />
+              <input
+                type="text"
+                required
+                minLength={6}
+                placeholder="Tymczasowe hasło (min. 6 zn.)"
+                value={newUser.password}
+                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+              />
+              <select
+                value={newUser.role}
+                onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+              >
+                <option value="GROUP_LEADER">GROUP_LEADER (Starosta Grupy)</option>
+                <option value="VIEWER">VIEWER (Tylko odczyt)</option>
+                <option value="ADMIN">ADMIN (Pełny dostęp)</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Przypisana grupa (np. 2, Lab 1A)"
+                value={newUser.assigned_group}
+                onChange={(e) => setNewUser({ ...newUser, assigned_group: e.target.value })}
+                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+              />
+              <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-bold text-white">
+                <Icon name="plus" className="w-3.5 h-3.5" />
+                <span>Utwórz Konto</span>
+              </button>
+            </form>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-slate-950 border-b border-slate-800 text-[11px] uppercase text-slate-400">
+                    <th className="p-3.5">Użytkownik</th>
+                    <th className="p-3.5">Rola RBAC</th>
+                    <th className="p-3.5">Grupa</th>
+                    <th className="p-3.5">Status</th>
+                    <th className="p-3.5">Reset Hasła Tymczasowego</th>
+                    <th className="p-3.5 text-right">Akcje</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {users.map((u) => (
+                    <tr key={u.id} className="hover:bg-slate-800/30">
+                      <td className="p-3.5">
+                        <div className="flex items-center gap-2.5">
+                          {u.avatar_url ? (
+                            <img src={u.avatar_url} alt={u.full_name} className="w-7 h-7 rounded-full object-cover border border-slate-700" />
+                          ) : (
+                            <div className="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                              {getInitials(u.full_name)}
+                            </div>
+                          )}
+                          <div>
+                            <div className="font-bold text-white">{u.full_name}</div>
+                            <div className="text-slate-400 font-mono text-[11px]">{u.email}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-3.5">
+                        <select
+                          disabled={u.id === currentAdminId}
+                          value={u.role}
+                          onChange={(e) => handleRoleOrStatusChange(u.id, { role: e.target.value })}
+                          className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-700 text-white disabled:opacity-50"
+                        >
+                          <option value="ADMIN">ADMIN</option>
+                          <option value="GROUP_LEADER">GROUP_LEADER</option>
+                          <option value="VIEWER">VIEWER</option>
+                        </select>
+                      </td>
+                      <td className="p-3.5 text-slate-300">{u.assigned_group || 'Wszystkie'}</td>
+                      <td className="p-3.5">
+                        <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                          u.is_active ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'
+                        }`}>
+                          {u.is_active ? 'Aktywne' : 'Zablokowane'}
+                        </span>
+                      </td>
+                      <td className="p-3.5">
+                        <div className="flex items-center gap-1.5">
+                          <input
+                            type="text"
+                            placeholder="Nowe hasło tymczasowe..."
+                            value={resetPasswords[u.id] || ''}
+                            onChange={(e) => setResetPasswords({ ...resetPasswords, [u.id]: e.target.value })}
+                            className="px-2.5 py-1 rounded bg-slate-950 border border-slate-700 text-white"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleResetPassword(u.id)}
+                            className="px-2.5 py-1 rounded bg-amber-600/80 hover:bg-amber-500 text-white font-semibold"
+                          >
+                            Nadaj
+                          </button>
+                        </div>
+                      </td>
+                      <td className="p-3.5 text-right space-x-2">
+                        {u.id !== currentAdminId && (
+                          <>
+                            <button
+                              onClick={() => handleRoleOrStatusChange(u.id, { is_active: !u.is_active })}
+                              className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                            >
+                              {u.is_active ? 'Zablokuj' : 'Odblokuj'}
+                            </button>
+                            <button
+                              onClick={async () => {
+                                if (!window.confirm(`Usunąć konto ${u.email}?`)) return;
+                                await apiFetch(`/api/users/${u.id}`, { method: 'DELETE' });
+                                onRefresh();
+                              }}
+                              className="px-2.5 py-1 rounded bg-rose-500/20 hover:bg-rose-500/40 text-rose-300"
+                            >
+                              Usuń
+                            </button>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
