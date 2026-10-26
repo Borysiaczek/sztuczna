@@ -11,9 +11,14 @@
       theme: {
         extend: {
           colors: {
-            slate950: '#070b14',
-            polslBlue: '#1d4ed8',
-            polslGold: '#f59e0b'
+            voidBlack: '#050508',
+            carbon: '#09090e',
+            darkSurface: '#0e0e15',
+            cardSurface: '#12121b',
+            crimsonBorder: '#28131a',
+            crimsonRed: '#dc2626',
+            crimsonRuby: '#e11d48',
+            slate950: '#060609'
           }
         }
       }
@@ -24,17 +29,29 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     body {
-      background-color: #070b14;
-      color: #f1f5f9;
+      background-color: #050508;
+      background-image: 
+        radial-gradient(ellipse 90% 50% at 50% -12%, rgba(220, 38, 38, 0.18), transparent 70%),
+        radial-gradient(circle at 10% 40%, rgba(185, 28, 28, 0.05), transparent 35%),
+        radial-gradient(circle at 90% 80%, rgba(225, 29, 72, 0.04), transparent 40%);
+      background-attachment: fixed;
+      color: #f4f4f5;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #060608; }
+    ::-webkit-scrollbar-thumb { background: #2f1219; border-radius: 4px; border: 1px solid #4a1824; }
+    ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
+
+    .glow-crimson {
+      box-shadow: 0 0 25px -4px rgba(220, 38, 38, 0.28);
+    }
+    .glow-crimson-sm {
+      box-shadow: 0 0 14px -2px rgba(220, 38, 38, 0.22);
+    }
   </style>
 </head>
-<body class="min-h-screen antialiased selection:bg-blue-600 selection:text-white">
+<body class="min-h-screen antialiased selection:bg-red-600 selection:text-white">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -312,15 +329,15 @@
 
     function CategoryBadge({ category }) {
       const map = {
-        KOLOKWIUM: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-        EGZAMIN: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
-        DEADLINE_RAU2: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
-        LAB: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-        WYKLAD: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
-        LEKTORAT: 'bg-teal-500/20 text-teal-300 border-teal-500/40',
-        CWICZENIA: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
-        PROJEKT: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
-        INNE: 'bg-slate-700/50 text-slate-300 border-slate-600'
+        KOLOKWIUM: 'bg-red-950/60 text-red-200 border-red-600/50 shadow-[0_0_10px_rgba(220,38,38,0.22)]',
+        EGZAMIN: 'bg-red-900/70 text-red-100 border-red-500 font-bold shadow-[0_0_14px_rgba(220,38,38,0.35)]',
+        DEADLINE_RAU2: 'bg-rose-950/60 text-rose-200 border-rose-600/50 shadow-[0_0_8px_rgba(225,29,72,0.2)]',
+        LAB: 'bg-zinc-900/90 text-emerald-300 border-emerald-600/40',
+        WYKLAD: 'bg-zinc-900/90 text-zinc-300 border-zinc-700/60',
+        LEKTORAT: 'bg-zinc-900/90 text-teal-300 border-teal-700/40',
+        CWICZENIA: 'bg-zinc-900/90 text-amber-300 border-amber-600/40',
+        PROJEKT: 'bg-rose-950/30 text-rose-200 border-rose-700/40',
+        INNE: 'bg-zinc-900 text-zinc-400 border-zinc-800'
       };
       const cls = map[category] || map.INNE;
       return (
@@ -332,9 +349,9 @@
 
     function RoleBadge({ role }) {
       const styles = {
-        ADMIN: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
-        GROUP_LEADER: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-        VIEWER: 'bg-slate-700/60 text-slate-300 border-slate-600'
+        ADMIN: 'bg-red-950/70 text-red-200 border-red-500/60 shadow-[0_0_12px_rgba(220,38,38,0.25)]',
+        GROUP_LEADER: 'bg-zinc-900 text-zinc-200 border-zinc-700',
+        VIEWER: 'bg-zinc-950 text-zinc-400 border-zinc-800'
       };
       const labels = {
         ADMIN: 'ADMIN (Starosta Roku)',
@@ -406,14 +423,14 @@
       };
 
       return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="px-6 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+          <div className="w-full max-w-md bg-[#0c0c11] border border-red-950/80 rounded-2xl shadow-2xl shadow-black overflow-hidden">
+            <div className="px-6 py-4 bg-[#07070a] border-b border-red-950/60 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Icon name="user" className="w-4 h-4 text-blue-400" />
-                <h3 className="text-sm font-bold text-white">Twój Profil i Zdjęcie Profilowe</h3>
+                <Icon name="user" className="w-4 h-4 text-red-400" />
+                <h3 className="text-sm font-bold text-white tracking-wide">Twój Profil i Zdjęcie Profilowe</h3>
               </div>
-              <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
+              <button onClick={onClose} className="text-zinc-400 hover:text-white p-1">
                 <Icon name="close" className="w-4 h-4" />
               </button>
             </div>
@@ -426,10 +443,10 @@
                     <img
                       src={user.avatar_url}
                       alt={user.full_name}
-                      className="w-20 h-20 rounded-full object-cover border-2 border-blue-500 shadow-lg"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-red-600 shadow-[0_0_15px_rgba(220,38,38,0.35)]"
                     />
                   ) : (
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-xl font-bold text-white border-2 border-slate-700 shadow-lg">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-600 via-rose-700 to-red-950 flex items-center justify-center text-xl font-bold text-white border-2 border-red-900/60 shadow-[0_0_15px_rgba(220,38,38,0.25)]">
                       {getInitials(user.full_name)}
                     </div>
                   )}
@@ -447,10 +464,10 @@
                 <div className="space-y-2 flex-1">
                   <div>
                     <div className="text-sm font-bold text-white">{user.full_name}</div>
-                    <div className="text-xs text-slate-400 font-mono">{user.email}</div>
+                    <div className="text-xs text-red-400/80 font-mono">{user.email}</div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition">
+                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-xs font-semibold text-white shadow-md shadow-red-950/50 transition">
                       <Icon name="camera" className="w-3.5 h-3.5" />
                       <span>{uploading ? 'Wgrywanie...' : 'Wgraj zdjęcie'}</span>
                       <input
@@ -466,7 +483,7 @@
                         type="button"
                         onClick={handleRemoveAvatar}
                         disabled={uploading}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 text-xs font-semibold transition"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-red-950/40 hover:bg-red-950/70 border border-red-900/40 text-red-300 text-xs font-semibold transition"
                       >
                         <Icon name="trash" className="w-3.5 h-3.5" />
                         <span>Usuń</span>
@@ -477,8 +494,8 @@
               </div>
 
               {/* Zmiana hasła */}
-              <form onSubmit={handleChangePassword} className="pt-4 border-t border-slate-800 space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <form onSubmit={handleChangePassword} className="pt-4 border-t border-zinc-800/80 space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   Zmiana hasła dostępowego
                 </h4>
                 <input
@@ -487,7 +504,7 @@
                   placeholder="Aktualne hasło"
                   value={passwords.current_password}
                   onChange={(e) => setPasswords({ ...passwords, current_password: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-black/70 border border-zinc-800 text-xs text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/40"
                 />
                 <input
                   type="password"
@@ -496,20 +513,20 @@
                   placeholder="Nowe hasło (min. 6 znaków)"
                   value={passwords.new_password}
                   onChange={(e) => setPasswords({ ...passwords, new_password: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-black/70 border border-zinc-800 text-xs text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/40"
                 />
                 <div className="flex justify-end gap-2 pt-1">
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-3.5 py-1.5 rounded-lg bg-slate-800 text-xs font-semibold text-slate-300"
+                    className="px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xs font-semibold text-zinc-300 border border-zinc-800"
                   >
                     Zamknij
                   </button>
                   <button
                     type="submit"
                     disabled={changingPass}
-                    className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white"
+                    className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-xs font-semibold text-white shadow-md shadow-red-950/50"
                   >
                     {changingPass ? 'Zapisywanie...' : 'Zmień hasło'}
                   </button>
@@ -546,32 +563,32 @@
       };
 
       return (
-        <div className="min-h-screen flex items-center justify-center px-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/50 via-slate-950 to-slate-950">
-          <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl shadow-2xl p-8 backdrop-blur-md">
+        <div className="min-h-screen flex items-center justify-center px-4 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,_var(--tw-gradient-stops))] from-red-900/35 via-black to-[#050508]">
+          <div className="w-full max-w-md bg-[#0c0c11]/95 border border-red-950/90 hover:border-red-900/50 rounded-2xl shadow-[0_0_60px_rgba(220,38,38,0.12)] p-8 backdrop-blur-xl transition duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/30 font-bold text-xl tracking-wider">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-600 via-rose-600 to-red-900 flex items-center justify-center shadow-lg shadow-red-600/40 border border-red-500/40 font-black text-xl tracking-wider text-white">
                 RAU2
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white tracking-tight">Starosta Hub</h1>
-                <p className="text-xs text-slate-400">Politechnika Śląska • Wydział AEiI (RAU2)</p>
+                <h1 className="text-xl font-black text-white tracking-tight">Starosta <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-400">Hub</span></h1>
+                <p className="text-xs text-zinc-400">Politechnika Śląska • Wydział AEiI (RAU2)</p>
               </div>
             </div>
 
-            <p className="text-sm text-slate-400 mb-6">
+            <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
               Zaloguj się kontem Starosty Roku lub Starosty Grupy Dziekańskiej. Autoryzacja chroniona tokenem JWT (HttpOnly).
             </p>
 
             {error && (
-              <div className="mb-4 p-3 rounded-lg bg-rose-500/15 border border-rose-500/40 text-rose-300 text-sm flex items-center gap-2">
-                <Icon name="alert" className="w-4 h-4 shrink-0" />
+              <div className="mb-4 p-3 rounded-lg bg-red-950/60 border border-red-600/60 text-red-200 text-sm flex items-center gap-2 shadow-[0_0_12px_rgba(220,38,38,0.2)]">
+                <Icon name="alert" className="w-4 h-4 shrink-0 text-red-400" />
                 <span>{error}</span>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
                   Adres Email (@student.polsl.pl)
                 </label>
                 <input
@@ -580,12 +597,12 @@
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="starosta@student.polsl.pl"
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-black/70 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/40 text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
                   Hasło
                 </label>
                 <input
@@ -594,20 +611,20 @@
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-black/70 border border-zinc-800 text-zinc-100 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/40 text-sm"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 font-semibold text-sm text-white shadow-lg shadow-blue-600/25 transition"
+                className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-red-600 via-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 disabled:opacity-50 font-bold text-sm text-white shadow-lg shadow-red-600/30 hover:shadow-red-600/50 transition duration-200"
               >
                 {loading ? 'Weryfikacja poświadczeń...' : 'Zaloguj do Panelu Starosty'}
               </button>
             </form>
 
-            <div className="mt-6 pt-5 border-t border-slate-800/80 text-xs text-slate-500 flex justify-between">
+            <div className="mt-6 pt-5 border-t border-zinc-800/80 text-xs text-zinc-500 flex justify-between">
               <span>Integracja: USOSweb & Moodle RAU2</span>
               <span>Office 365 SMTP / BCC</span>
             </div>
@@ -689,19 +706,19 @@
       };
 
       return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="px-6 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="w-full max-w-3xl bg-[#0c0c11] border border-red-950/80 rounded-2xl shadow-2xl shadow-black overflow-hidden">
+            <div className="px-6 py-4 bg-[#07070a] border-b border-red-950/60 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <Icon name="mail" className="w-5 h-5 text-blue-400" />
+                <Icon name="mail" className="w-5 h-5 text-red-400" />
                 <div>
-                  <h3 className="text-base font-bold text-white">Moduł Poczty (Office 365 SMTP & 1-Click Outlook BCC)</h3>
-                  <p className="text-xs text-slate-400">
-                    Wybrano odbiorców: <strong className="text-blue-400">{recipients.length} studentów</strong>
+                  <h3 className="text-base font-bold text-white tracking-wide">Moduł Poczty (Office 365 SMTP & 1-Click Outlook BCC)</h3>
+                  <p className="text-xs text-zinc-400">
+                    Wybrano odbiorców: <strong className="text-red-400">{recipients.length} studentów</strong>
                   </p>
                 </div>
               </div>
-              <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
+              <button onClick={onClose} className="text-zinc-400 hover:text-white p-1">
                 <Icon name="close" className="w-5 h-5" />
               </button>
             </div>
@@ -709,8 +726,8 @@
             <div className="p-6 space-y-5 max-h-[82vh] overflow-y-auto">
               <div className={`p-3.5 rounded-xl border text-xs flex flex-wrap items-center justify-between gap-2 ${
                 mailConfig?.is_configured
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                  : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                  ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
+                  : 'bg-amber-950/30 border-amber-500/40 text-amber-300'
               }`}>
                 <div>
                   <span className="font-semibold">Serwer SMTP ({mailConfig?.smtp_host}:{mailConfig?.smtp_port}): </span>
@@ -721,7 +738,7 @@
                 <button
                   type="button"
                   onClick={handleOutlookFallback}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition shadow"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold transition border border-zinc-700"
                 >
                   <Icon name="send" className="w-3.5 h-3.5" />
                   <span>Otwórz w Outlook (1-Click BCC + Kopiuj adresy)</span>
@@ -730,7 +747,7 @@
 
               <form onSubmit={handleSmtpSend} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1">
                     Temat wiadomości (obsługuje zmienne &#123;imie&#125;, &#123;grupa&#125;)
                   </label>
                   <input
@@ -738,17 +755,17 @@
                     required
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm text-white"
+                    className="w-full px-3.5 py-2 rounded-lg bg-black/70 border border-zinc-800 text-sm text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/40"
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                       Szablon treści wiadomości
                     </label>
-                    <span className="text-[11px] text-slate-400">
-                      Dostępne zmienne: <code className="text-blue-400">&#123;imie&#125;</code>, <code className="text-blue-400">&#123;nazwisko&#125;</code>, <code className="text-blue-400">&#123;grupa&#125;</code>, <code className="text-blue-400">&#123;komentarz&#125;</code>
+                    <span className="text-[11px] text-zinc-400">
+                      Dostępne zmienne: <code className="text-red-400">&#123;imie&#125;</code>, <code className="text-red-400">&#123;nazwisko&#125;</code>, <code className="text-red-400">&#123;grupa&#125;</code>, <code className="text-red-400">&#123;komentarz&#125;</code>
                     </span>
                   </div>
                   <textarea
@@ -756,18 +773,18 @@
                     required
                     value={bodyTemplate}
                     onChange={(e) => setBodyTemplate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-sm text-white font-mono"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-black/70 border border-zinc-800 text-sm text-white font-mono focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/40"
                   />
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800">
-                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1.5">
+                <div className="p-3.5 rounded-xl bg-black/60 border border-zinc-800">
+                  <div className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold mb-1.5">
                     Podgląd personalizacji dla: {sampleStudent.imie} {sampleStudent.nazwisko} ({sampleStudent.email})
                   </div>
-                  <div className="text-xs font-semibold text-slate-200 mb-1">
+                  <div className="text-xs font-semibold text-zinc-200 mb-1">
                     Temat: {renderPreview(subject)}
                   </div>
-                  <pre className="text-xs text-slate-400 whitespace-pre-wrap font-sans">
+                  <pre className="text-xs text-zinc-400 whitespace-pre-wrap font-sans">
                     {renderPreview(bodyTemplate)}
                   </pre>
                 </div>
@@ -775,8 +792,8 @@
                 {result && (
                   <div className={`p-3.5 rounded-xl border text-xs ${
                     result.failed_count === 0
-                      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
-                      : 'bg-rose-500/15 border-rose-500/40 text-rose-300'
+                      ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
+                      : 'bg-red-950/50 border-red-500/50 text-red-300'
                   }`}>
                     <p className="font-semibold">
                       Wysłano pomyślnie: {result.sent_count} | Błędy: {result.failed_count}
@@ -789,18 +806,18 @@
                   </div>
                 )}
 
-                <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-slate-800">
+                <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-zinc-800/80">
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300"
+                    className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xs font-semibold text-zinc-300 border border-zinc-800"
                   >
                     Zamknij
                   </button>
                   <button
                     type="button"
                     onClick={handleOutlookFallback}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600/90 hover:bg-indigo-500 text-xs font-semibold text-white"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-white border border-zinc-700"
                   >
                     <Icon name="mail" className="w-3.5 h-3.5" />
                     <span>Kopiuj BCC i otwórz Outlook</span>
@@ -808,7 +825,7 @@
                   <button
                     type="submit"
                     disabled={sending || recipients.length === 0}
-                    className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20"
+                    className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 disabled:opacity-50 text-xs font-semibold text-white shadow-lg shadow-red-600/30"
                   >
                     <Icon name="send" className="w-3.5 h-3.5" />
                     <span>{sending ? 'Wysyłanie przez SMTP...' : `Wyślij spersonalizowane maile SMTP (${recipients.length})`}</span>
@@ -1061,7 +1078,7 @@
 
       if (!authChecked) {
         return (
-          <div className="min-h-screen flex items-center justify-center text-slate-400 text-sm">
+          <div className="min-h-screen flex items-center justify-center text-zinc-400 text-sm">
             Ładowanie Starosta Hub (RAU2)...
           </div>
         );
@@ -1074,45 +1091,45 @@
       const allGroupsList = Array.from(new Set(['1', '2', '3', ...groups]));
 
       return (
-        <div className="min-h-screen flex flex-col bg-slate950 text-slate-100">
+        <div className="min-h-screen flex flex-col bg-transparent text-zinc-100">
           {/* POWIADOMIENIE TOAST */}
           {toast && (
             <div className={`fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl border text-xs font-semibold flex items-center gap-2.5 transition-all ${
               toast.type === 'error'
-                ? 'bg-rose-950/95 border-rose-500/50 text-rose-200'
-                : 'bg-slate-900/95 border-blue-500/50 text-blue-200'
+                ? 'bg-red-950/95 border-red-500/80 text-red-200 shadow-red-950/60'
+                : 'bg-[#0c0c12]/95 border-red-500/60 text-zinc-100 shadow-black'
             }`}>
-              <Icon name={toast.type === 'error' ? 'alert' : 'check'} className="w-4 h-4 shrink-0" />
+              <Icon name={toast.type === 'error' ? 'alert' : 'check'} className="w-4 h-4 shrink-0 text-red-400" />
               <span>{toast.message}</span>
             </div>
           )}
 
           {/* GÓRNY PASEK NAWIGACYJNY */}
-          <header className="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-3.5">
+          <header className="sticky top-0 z-30 bg-[#07070a]/90 backdrop-blur-md border-b border-red-950/60 px-6 py-3.5 shadow-lg shadow-black/50">
             <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-bold text-sm shadow-md shadow-blue-600/30">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 via-rose-600 to-red-900 flex items-center justify-center font-black text-sm text-white shadow-md shadow-red-600/30 border border-red-500/30">
                   RAU2
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-base text-white">Starosta Hub</span>
-                    <span className="text-[11px] px-2 py-0.5 rounded bg-blue-500/15 text-blue-400 border border-blue-500/30 font-medium">
+                    <span className="font-extrabold text-base text-white tracking-tight">Starosta <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-400">Hub</span></span>
+                    <span className="text-[11px] px-2 py-0.5 rounded bg-red-950/50 text-red-400 border border-red-800/40 font-semibold">
                       Politechnika Śląska • AEiI
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Zalogowano jako: <strong className="text-slate-200">{user.full_name}</strong>
+                  <p className="text-xs text-zinc-400">
+                    Zalogowano jako: <strong className="text-zinc-200">{user.full_name}</strong>
                   </p>
                 </div>
               </div>
 
               {/* Nawigacja Zakładek (Z IKONAMI SVG) */}
-              <nav className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+              <nav className="flex flex-wrap items-center gap-1.5 bg-[#050507] p-1.5 rounded-xl border border-zinc-800/80">
                 <button
                   onClick={() => setActiveTab('dashboard')}
                   className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    activeTab === 'dashboard' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                    activeTab === 'dashboard' ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-600/30' : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
                   }`}
                 >
                   <Icon name="timeline" className="w-3.5 h-3.5" />
@@ -1121,7 +1138,7 @@
                 <button
                   onClick={() => setActiveTab('calendar')}
                   className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    activeTab === 'calendar' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                    activeTab === 'calendar' ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-600/30' : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
                   }`}
                 >
                   <Icon name="calendar" className="w-3.5 h-3.5" />
@@ -1130,7 +1147,7 @@
                 <button
                   onClick={() => setActiveTab('students')}
                   className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    activeTab === 'students' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                    activeTab === 'students' ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-600/30' : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
                   }`}
                 >
                   <Icon name="users" className="w-3.5 h-3.5" />
@@ -1139,7 +1156,7 @@
                 <button
                   onClick={() => setActiveTab('rau2')}
                   className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    activeTab === 'rau2' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                    activeTab === 'rau2' ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-600/30' : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
                   }`}
                 >
                   <Icon name="book" className="w-3.5 h-3.5" />
@@ -1149,7 +1166,7 @@
                   <button
                     onClick={() => setActiveTab('users')}
                     className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-                      activeTab === 'users' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                      activeTab === 'users' ? 'bg-gradient-to-r from-red-700 to-rose-800 text-white shadow-md shadow-red-700/30' : 'text-zinc-400 hover:text-white hover:bg-zinc-900/60'
                     }`}
                   >
                     <Icon name="shield" className="w-3.5 h-3.5" />
@@ -1162,7 +1179,7 @@
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setIsProfileModalOpen(true)}
-                  className="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full bg-slate-950 hover:bg-slate-800 border border-slate-800 transition group"
+                  className="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full bg-[#050507] hover:bg-zinc-900 border border-zinc-800 hover:border-red-900/50 transition group"
                   title="Kliknij, aby ustawić zdjęcie profilowe lub zmienić hasło"
                 >
                   <div className="relative">
@@ -1170,28 +1187,28 @@
                       <img
                         src={user.avatar_url}
                         alt={user.full_name}
-                        className="w-8 h-8 rounded-full object-cover border border-blue-500"
+                        className="w-8 h-8 rounded-full object-cover border border-red-500 shadow-[0_0_8px_rgba(220,38,38,0.3)]"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-xs font-bold text-white">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-600 to-rose-800 flex items-center justify-center text-xs font-bold text-white shadow-[0_0_8px_rgba(220,38,38,0.25)]">
                         {getInitials(user.full_name)}
                       </div>
                     )}
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-blue-400">
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-black border border-zinc-700 flex items-center justify-center text-red-400">
                       <Icon name="camera" className="w-2.5 h-2.5" />
                     </span>
                   </div>
                   <div className="text-left hidden sm:block">
-                    <div className="text-xs font-semibold text-slate-200 group-hover:text-white leading-tight">
+                    <div className="text-xs font-semibold text-zinc-200 group-hover:text-white leading-tight">
                       {user.full_name}
                     </div>
-                    <div className="text-[10px] text-blue-400 leading-tight">{user.role}</div>
+                    <div className="text-[10px] text-red-400 leading-tight font-medium">{user.role}</div>
                   </div>
                 </button>
 
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-600/80 text-xs font-semibold text-slate-300 hover:text-white transition"
+                  className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-red-950/80 hover:text-red-200 border border-zinc-800 hover:border-red-800/50 text-xs font-semibold text-zinc-300 transition"
                 >
                   Wyloguj
                 </button>
@@ -1203,55 +1220,55 @@
           <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-6 space-y-6">
             {/* KARTY STATYSTYK ROKU */}
             <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[#0c0c11]/90 border border-zinc-800/80 hover:border-red-950/80 rounded-xl p-4 flex items-center justify-between shadow-lg shadow-black/20 transition">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase font-semibold">Studenci (Filtr)</p>
+                  <p className="text-xs text-zinc-400 uppercase font-semibold">Studenci (Filtr)</p>
                   <p className="text-2xl font-bold text-white mt-1">{students.length}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Grupy: {groups.join(', ') || '1, 2, 3'}</p>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">Grupy: {groups.join(', ') || '1, 2, 3'}</p>
                 </div>
-                <div className="w-11 h-11 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                <div className="w-11 h-11 rounded-xl bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400 shadow-[0_0_12px_rgba(220,38,38,0.2)]">
                   <Icon name="users" className="w-5 h-5" />
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[#0c0c11]/90 border border-zinc-800/80 hover:border-red-950/80 rounded-xl p-4 flex items-center justify-between shadow-lg shadow-black/20 transition">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase font-semibold">Przedmioty RAU2 / USOS</p>
+                  <p className="text-xs text-zinc-400 uppercase font-semibold">Przedmioty RAU2 / USOS</p>
                   <p className="text-2xl font-bold text-white mt-1">{courses.length}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">platforma.polsl.pl/rau2</p>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">platforma.polsl.pl/rau2</p>
                 </div>
-                <div className="w-11 h-11 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <div className="w-11 h-11 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.2)]">
                   <Icon name="book" className="w-5 h-5" />
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[#0c0c11]/90 border border-zinc-800/80 hover:border-red-950/80 rounded-xl p-4 flex items-center justify-between shadow-lg shadow-black/20 transition">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase font-semibold">Kolokwia, Egzaminy i Moodle</p>
+                  <p className="text-xs text-zinc-400 uppercase font-semibold">Kolokwia, Egzaminy i Moodle</p>
                   <p className="text-2xl font-bold text-amber-400 mt-1">{timelineEventsOnly.length}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
                     Zajęcia w Kalendarzu: {events.length - timelineEventsOnly.length}
                   </p>
                 </div>
-                <div className="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <div className="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
                   <Icon name="calendar" className="w-5 h-5" />
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[#0c0c11]/90 border border-zinc-800/80 hover:border-red-950/80 rounded-xl p-4 flex items-center justify-between shadow-lg shadow-black/20 transition">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase font-semibold">Szybka Komunikacja</p>
+                  <p className="text-xs text-zinc-400 uppercase font-semibold">Szybka Komunikacja</p>
                   <div className="flex items-center gap-2 mt-2">
                     <button
                       onClick={() => setIsMailModalOpen(true)}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-sm shadow-red-950/50 transition"
                     >
                       <Icon name="mail" className="w-3.5 h-3.5" />
                       <span>Kreator SMTP</span>
                     </button>
                     <button
                       onClick={triggerQuickOutlookBCC}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-200 transition"
                       title="Kopiuj adresy wyfiltrowanych studentów i otwórz Outlook BCC"
                     >
                       <Icon name="send" className="w-3.5 h-3.5" />
@@ -1259,7 +1276,7 @@
                     </button>
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)]">
                   <Icon name="send" className="w-5 h-5" />
                 </div>
               </div>
@@ -1293,11 +1310,11 @@
             {/* ==================== ZAKŁADKA 3: BAZA STUDENTÓW + UKRYWANY IMPORT EXCEL + INLINE EDIT ==================== */}
             {activeTab === 'students' && (
               <section className="space-y-5">
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
                       <h2 className="text-lg font-bold text-white">Baza Studentów Roku (RAU2)</h2>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-zinc-400">
                         Kliknij w komórkę grupy lub komentarza w tabeli, aby edytować ją natychmiast (Inline Edit) bez przeładowania strony.
                       </p>
                     </div>
@@ -1305,7 +1322,7 @@
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         onClick={triggerQuickOutlookBCC}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow transition"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-200 shadow transition"
                       >
                         <Icon name="send" className="w-3.5 h-3.5" />
                         <span>Otwórz w Outlook ({selectedStudentIds.length > 0 ? selectedStudentIds.length : students.length} BCC)</span>
@@ -1313,7 +1330,7 @@
 
                       <button
                         onClick={() => setIsMailModalOpen(true)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white shadow transition"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40 transition"
                       >
                         <Icon name="mail" className="w-3.5 h-3.5" />
                         <span>Wyślij Mail (SMTP)</span>
@@ -1326,8 +1343,8 @@
                           onClick={() => toggleExcelDropzone(!showExcelDropzone)}
                           className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition ${
                             showExcelDropzone
-                              ? 'bg-blue-600/20 border-blue-500/40 text-blue-300'
-                              : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
+                              ? 'bg-red-950/40 border-red-500/50 text-red-300'
+                              : 'bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-zinc-200'
                           }`}
                           title="Pokaż lub ukryj pasek wgrywania pliku Excel / CSV"
                         >
@@ -1338,14 +1355,14 @@
 
                       <a
                         href={`/api/students/export?format=xlsx&grupa=${encodeURIComponent(selectedGroup)}&search=${encodeURIComponent(searchQuery)}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-200"
                       >
                         <Icon name="download" className="w-3.5 h-3.5" />
                         <span>Eksport .XLSX</span>
                       </a>
                       <a
                         href={`/api/students/export?format=csv&grupa=${encodeURIComponent(selectedGroup)}&search=${encodeURIComponent(searchQuery)}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-200"
                       >
                         <Icon name="download" className="w-3.5 h-3.5" />
                         <span>Eksport .CSV</span>
@@ -1354,7 +1371,7 @@
                       {canEdit && (
                         <button
                           onClick={() => setShowAddStudentForm(!showAddStudentForm)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40"
                         >
                           <Icon name="plus" className="w-3.5 h-3.5" />
                           <span>Dodaj Studenta</span>
@@ -1365,14 +1382,14 @@
 
                   {/* Formularz dodawania pojedynczego studenta */}
                   {showAddStudentForm && canEdit && (
-                    <form onSubmit={handleCreateStudent} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-6 gap-3">
+                    <form onSubmit={handleCreateStudent} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800 grid grid-cols-1 sm:grid-cols-6 gap-3">
                       <input
                         type="text"
                         required
                         placeholder="Imię"
                         value={newStudent.imie}
                         onChange={(e) => setNewStudent({ ...newStudent, imie: e.target.value })}
-                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                        className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-red-500 focus:outline-none"
                       />
                       <input
                         type="text"
@@ -1380,7 +1397,7 @@
                         placeholder="Nazwisko"
                         value={newStudent.nazwisko}
                         onChange={(e) => setNewStudent({ ...newStudent, nazwisko: e.target.value })}
-                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                        className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-red-500 focus:outline-none"
                       />
                       <input
                         type="email"
@@ -1388,7 +1405,7 @@
                         placeholder="Email (@student.polsl.pl)"
                         value={newStudent.email}
                         onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
-                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white sm:col-span-2"
+                        className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white sm:col-span-2 focus:border-red-500 focus:outline-none"
                       />
                       <input
                         type="text"
@@ -1396,7 +1413,7 @@
                         placeholder="Grupa (np. 1, Lab 2A)"
                         value={newStudent.grupa}
                         onChange={(e) => setNewStudent({ ...newStudent, grupa: e.target.value })}
-                        className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                        className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-red-500 focus:outline-none"
                       />
                       <div className="flex gap-2">
                         <input
@@ -1404,9 +1421,9 @@
                           placeholder="Komentarz (np. IOS)"
                           value={newStudent.komentarz}
                           onChange={(e) => setNewStudent({ ...newStudent, komentarz: e.target.value })}
-                          className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                          className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-red-500 focus:outline-none"
                         />
-                        <button type="submit" className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
+                        <button type="submit" className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-bold text-white shadow-md shadow-red-950/40">
                           Zapisz
                         </button>
                       </div>
@@ -1427,26 +1444,26 @@
                       }}
                       className={`p-3.5 rounded-xl border border-dashed transition flex flex-wrap items-center justify-between gap-4 ${
                         isDraggingFile
-                          ? 'border-blue-500 bg-blue-500/10'
-                          : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
+                          ? 'border-red-500 bg-red-950/20'
+                          : 'border-zinc-800 bg-[#07070a]/60 hover:border-red-900/40'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                        <div className="w-9 h-9 rounded-lg bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400">
                           <Icon name="upload" className="w-4 h-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-semibold text-slate-200">
-                            Przeciągnij i upuść plik <code className="text-blue-400">.xlsx</code> lub <code className="text-blue-400">.csv</code> z listą studentów
+                          <p className="text-xs font-semibold text-zinc-200">
+                            Przeciągnij i upuść plik <code className="text-red-400">.xlsx</code> lub <code className="text-red-400">.csv</code> z listą studentów
                           </p>
-                          <p className="text-[11px] text-slate-400">
-                            Kolumny: <strong className="text-slate-300">Imie, Nazwisko, Email, Grupa, Komentarz</strong>. Duplikaty po adresie email są aktualizowane.
+                          <p className="text-[11px] text-zinc-400">
+                            Kolumny: <strong className="text-zinc-300">Imie, Nazwisko, Email, Grupa, Komentarz</strong>. Duplikaty po adresie email są aktualizowane.
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200">
+                        <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-200">
                           <Icon name="upload" className="w-3.5 h-3.5" />
                           <span>Wybierz plik z dysku</span>
                           <input
@@ -1459,7 +1476,7 @@
                         <button
                           type="button"
                           onClick={() => toggleExcelDropzone(false)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs border border-slate-800 transition"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#07070a] hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 text-xs border border-zinc-800 transition"
                           title="Ukryj ten pasek (możesz go ponownie otworzyć przyciskiem 'Import Excel / CSV')"
                         >
                           <Icon name="eyeOff" className="w-3.5 h-3.5" />
@@ -1470,12 +1487,12 @@
                   )}
 
                   {importReport && (
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-blue-500/40 text-xs space-y-1">
+                    <div className="p-3.5 rounded-xl bg-[#07070a] border border-red-500/40 text-xs space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-blue-300">
+                        <span className="font-bold text-red-300">
                           Raport Importu: Dodano nowych: {importReport.inserted} | Zaktualizowano (duplikaty email): {importReport.updated} | Pominięto: {importReport.skipped}
                         </span>
-                        <button onClick={() => setImportReport(null)} className="text-slate-400 hover:text-white">
+                        <button onClick={() => setImportReport(null)} className="text-zinc-400 hover:text-white">
                           <Icon name="close" className="w-4 h-4" />
                         </button>
                       </div>
@@ -1488,15 +1505,15 @@
                   )}
 
                   {/* Filtrowanie po grupach + Wyszukiwarka tekstowa */}
-                  <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-slate-800/80">
+                  <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-zinc-800/80">
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-xs text-slate-400 mr-1 font-medium">Grupa:</span>
+                      <span className="text-xs text-zinc-400 mr-1 font-medium">Grupa:</span>
                       <button
                         onClick={() => setSelectedGroup('ALL')}
                         className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
                           selectedGroup === 'ALL'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                            ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-950/40'
+                            : 'bg-[#07070a] text-zinc-400 hover:text-white border border-zinc-800'
                         }`}
                       >
                         Wszystkie
@@ -1507,8 +1524,8 @@
                           onClick={() => setSelectedGroup(g)}
                           className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
                             selectedGroup === g
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                              ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-950/40'
+                              : 'bg-[#07070a] text-zinc-400 hover:text-white border border-zinc-800'
                           }`}
                         >
                           Grupa {g}
@@ -1522,15 +1539,15 @@
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Szukaj po nazwisku, imieniu, emailu lub komentarzu (np. IOS, starosta)..."
-                        className="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none text-xs text-white"
+                        className="w-full pl-9 pr-8 py-2 rounded-xl bg-[#07070a] border border-zinc-800 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500/40 text-xs text-white"
                       />
-                      <span className="absolute left-3 top-2.5 text-slate-500">
+                      <span className="absolute left-3 top-2.5 text-zinc-500">
                         <Icon name="search" className="w-3.5 h-3.5" />
                       </span>
                       {searchQuery && (
                         <button
                           onClick={() => setSearchQuery('')}
-                          className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
+                          className="absolute right-2.5 top-2.5 text-zinc-400 hover:text-white"
                         >
                           <Icon name="close" className="w-3.5 h-3.5" />
                         </button>
@@ -1540,15 +1557,15 @@
 
                   {/* Pasek Akcji Masowych (Bulk Actions) */}
                   {canEdit && selectedStudentIds.length > 0 && (
-                    <form onSubmit={handleBulkExecute} className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/40 flex flex-wrap items-center justify-between gap-3">
-                      <span className="text-xs font-semibold text-indigo-200">
+                    <form onSubmit={handleBulkExecute} className="p-3 rounded-xl bg-red-950/30 border border-red-700/40 flex flex-wrap items-center justify-between gap-3">
+                      <span className="text-xs font-semibold text-red-200">
                         Zaznaczono: {selectedStudentIds.length} studentów
                       </span>
                       <div className="flex flex-wrap items-center gap-2">
                         <select
                           value={bulkAction}
                           onChange={(e) => setBulkAction(e.target.value)}
-                          className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                          className="px-3 py-1.5 rounded-lg bg-black border border-zinc-800 text-xs text-white focus:border-red-500"
                         >
                           <option value="SET_GROUP">Zmień grupę na...</option>
                           <option value="APPEND_COMMENT">Dopisz do komentarza...</option>
@@ -1562,12 +1579,12 @@
                             placeholder={bulkAction === 'SET_GROUP' ? 'Nowa grupa (np. 2)' : 'Notatka (np. rozliczony)'}
                             value={bulkValue}
                             onChange={(e) => setBulkValue(e.target.value)}
-                            className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                            className="px-3 py-1.5 rounded-lg bg-black border border-zinc-800 text-xs text-white focus:border-red-500"
                           />
                         )}
                         <button
                           type="submit"
-                          className="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white"
+                          className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40"
                         >
                           Wykonaj dla zaznaczonych
                         </button>
@@ -1577,11 +1594,11 @@
                 </div>
 
                 {/* Tabela Studentów z Edycją Inline */}
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-slate-950/90 border-b border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                        <tr className="bg-[#07070a] border-b border-zinc-800 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
                           <th className="p-3.5 w-10">
                             <input
                               type="checkbox"
@@ -1593,7 +1610,7 @@
                                   setSelectedStudentIds([]);
                                 }
                               }}
-                              className="rounded bg-slate-900 border-slate-700"
+                              className="rounded bg-black border-zinc-700 accent-red-600"
                             />
                           </th>
                           <th className="p-3.5">Nazwisko i Imię</th>
@@ -1603,10 +1620,10 @@
                           {canEdit && <th className="p-3.5 text-right w-24">Akcje</th>}
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800/70 text-xs">
+                      <tbody className="divide-y divide-zinc-800/70 text-xs">
                         {students.length === 0 ? (
                           <tr>
-                            <td colSpan="6" className="p-8 text-center text-slate-500">
+                            <td colSpan="6" className="p-8 text-center text-zinc-500">
                               Brak studentów spełniających kryteria wyszukiwania. Kliknij "Import Excel / CSV" lub dodaj studenta ręcznie.
                             </td>
                           </tr>
@@ -1689,20 +1706,20 @@
       }, [student.grupa, student.komentarz]);
 
       return (
-        <tr className={`hover:bg-slate-800/40 transition ${selected ? 'bg-blue-950/25' : ''}`}>
+        <tr className={`hover:bg-zinc-900/40 transition ${selected ? 'bg-red-950/20 border-l-2 border-l-red-500' : ''}`}>
           <td className="p-3.5">
             <input
               type="checkbox"
               checked={selected}
               onChange={onToggleSelect}
-              className="rounded bg-slate-900 border-slate-700"
+              className="rounded bg-black border-zinc-700 accent-red-600"
             />
           </td>
           <td className="p-3.5 font-semibold text-white">
             {student.nazwisko} {student.imie}
           </td>
-          <td className="p-3.5 text-slate-300 font-mono text-[11px]">
-            <a href={`mailto:${student.email}`} className="hover:text-blue-400 underline decoration-slate-700">
+          <td className="p-3.5 text-zinc-300 font-mono text-[11px]">
+            <a href={`mailto:${student.email}`} className="hover:text-red-400 underline decoration-zinc-700 transition">
               {student.email}
             </a>
           </td>
@@ -1714,10 +1731,10 @@
                 onChange={(e) => setGrupaVal(e.target.value)}
                 onBlur={() => onInlineUpdate(student.id, 'grupa', grupaVal)}
                 onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
-                className="w-24 px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-700 focus:border-blue-500 focus:outline-none text-xs font-semibold text-blue-300"
+                className="w-24 px-2.5 py-1 rounded-lg bg-black border border-zinc-800 focus:border-red-500 focus:outline-none text-xs font-semibold text-red-300"
               />
             ) : (
-              <span className="px-2.5 py-1 rounded-lg bg-slate-800 text-blue-300 font-semibold">
+              <span className="px-2.5 py-1 rounded-lg bg-zinc-900 text-red-300 font-semibold border border-zinc-800">
                 {student.grupa}
               </span>
             )}
@@ -1731,17 +1748,17 @@
                 onChange={(e) => setKomentarzVal(e.target.value)}
                 onBlur={() => onInlineUpdate(student.id, 'komentarz', komentarzVal)}
                 onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
-                className="w-full px-2.5 py-1 rounded-lg bg-slate-950/80 border border-transparent hover:border-slate-700 focus:border-blue-500 focus:bg-slate-950 focus:outline-none text-xs text-slate-200"
+                className="w-full px-2.5 py-1 rounded-lg bg-black/60 border border-transparent hover:border-zinc-800 focus:border-red-500 focus:bg-black focus:outline-none text-xs text-zinc-200"
               />
             ) : (
-              <span className="text-slate-400">{student.komentarz || '—'}</span>
+              <span className="text-zinc-400">{student.komentarz || '—'}</span>
             )}
           </td>
           {canEdit && (
             <td className="p-3.5 text-right">
               <button
                 onClick={onDelete}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/25 text-rose-400 text-[11px] font-semibold transition"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-950/30 hover:bg-red-950/60 text-red-400 text-[11px] font-semibold border border-red-900/30 transition"
               >
                 <Icon name="trash" className="w-3 h-3" />
                 <span>Usuń</span>
@@ -1824,16 +1841,16 @@
       return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* LEWA KOLUMNA: WSPÓLNA OŚ CZASU (KOLOKWIA, EGZAMINY, DEADLINE'Y RAU2) */}
-          <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-7 bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <Icon name="timeline" className="w-4 h-4 text-blue-400" />
+                  <Icon name="timeline" className="w-4 h-4 text-red-400" />
                   <span>Wspólna Oś Czasu (Kolokwia, Egzaminy & Deadline'y RAU2)</span>
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-zinc-400">
                   Zwykłe zajęcia z USOSa (wykłady, laboratoria, lektoraty) są odfiltrowane i rozłożone w zakładce{' '}
-                  <button onClick={onOpenCalendarTab} className="text-blue-400 hover:underline font-semibold">
+                  <button onClick={onOpenCalendarTab} className="text-red-400 hover:underline font-semibold">
                     Kalendarz Zajęć
                   </button>.
                 </p>
@@ -1841,7 +1858,7 @@
               {canEdit && (
                 <button
                   onClick={() => setShowEventModal(!showEventModal)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40"
                 >
                   <Icon name="plus" className="w-3.5 h-3.5" />
                   <span>Dodaj Termin</span>
@@ -1850,7 +1867,7 @@
             </div>
 
             {showEventModal && canEdit && (
-              <form onSubmit={handleCreateEvent} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
+              <form onSubmit={handleCreateEvent} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800 space-y-3 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
                     type="text"
@@ -1858,19 +1875,19 @@
                     placeholder="Tytuł (np. Kolokwium Sztuczna Inteligencja)"
                     value={newEvent.title}
                     onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
                   <input
                     type="datetime-local"
                     required
                     value={newEvent.start_time}
                     onChange={(e) => setNewEvent({ ...newEvent, start_time: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
                   <select
                     value={newEvent.category}
                     onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   >
                     <option value="KOLOKWIUM">KOLOKWIUM</option>
                     <option value="EGZAMIN">EGZAMIN</option>
@@ -1882,7 +1899,7 @@
                     placeholder="Sala / Miejsce (np. Aula B AEiI / RAU2)"
                     value={newEvent.location}
                     onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
                 </div>
                 <textarea
@@ -1890,13 +1907,13 @@
                   placeholder="Zakres materiału lub dodatkowe uwagi..."
                   value={newEvent.description}
                   onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <div className="flex justify-end gap-2">
-                  <button type="button" onClick={() => setShowEventModal(false)} className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">
+                  <button type="button" onClick={() => setShowEventModal(false)} className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800">
                     Anuluj
                   </button>
-                  <button type="submit" className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white font-semibold">
+                  <button type="submit" className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-semibold shadow-md shadow-red-950/40">
                     Zapisz wydarzenie
                   </button>
                 </div>
@@ -1911,8 +1928,8 @@
                   onClick={() => setCategoryFilter(cat)}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
                     categoryFilter === cat
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
+                      ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-sm shadow-red-950/40'
+                      : 'bg-[#07070a] text-zinc-400 border border-zinc-800 hover:text-white'
                   }`}
                 >
                   {cat === 'ALL' ? 'Wszystkie ważne terminy' : cat}
@@ -1922,27 +1939,27 @@
 
             <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
               {filteredEvents.length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-500">
+                <div className="p-8 text-center text-xs text-zinc-500">
                   Brak kolokwiów, egzaminów ani deadline'ów w tej kategorii.
                 </div>
               ) : (
                 filteredEvents.map((ev) => (
-                  <div key={ev.id} className="p-4 rounded-xl bg-slate-950/90 border border-slate-800/90 hover:border-slate-700 flex items-start justify-between gap-3">
+                  <div key={ev.id} className="p-4 rounded-xl bg-[#07070a]/90 border border-zinc-800/80 hover:border-red-900/50 flex items-start justify-between gap-3 transition">
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <CategoryBadge category={ev.category} />
-                        <span className="text-xs font-bold text-blue-400 inline-flex items-center gap-1">
+                        <span className="text-xs font-bold text-red-400 inline-flex items-center gap-1">
                           <Icon name="clock" className="w-3.5 h-3.5" />
                           <span>{formatDateTime(ev.start_time)}</span>
                         </span>
-                        <span className="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
+                        <span className="text-[11px] px-2 py-0.5 rounded bg-black text-zinc-400 border border-zinc-800">
                           Źródło: {ev.source_label}
                         </span>
                       </div>
                       <h4 className="text-sm font-bold text-white pt-0.5">{ev.title}</h4>
-                      {ev.description && <p className="text-xs text-slate-400">{ev.description}</p>}
+                      {ev.description && <p className="text-xs text-zinc-400">{ev.description}</p>}
                       {ev.location && (
-                        <p className="text-[11px] text-slate-500 inline-flex items-center gap-1">
+                        <p className="text-[11px] text-zinc-500 inline-flex items-center gap-1">
                           <Icon name="mapPin" className="w-3 h-3" />
                           <span>Miejsce: {ev.location} • Grupa: {ev.target_group}</span>
                         </p>
@@ -1954,7 +1971,7 @@
                           await apiFetch(`/api/calendar/events/${ev.id}`, { method: 'DELETE' });
                           onRefresh();
                         }}
-                        className="text-slate-500 hover:text-rose-400 p-1"
+                        className="text-zinc-500 hover:text-red-400 p-1"
                         title="Usuń termin"
                       >
                         <Icon name="close" className="w-4 h-4" />
@@ -1967,21 +1984,21 @@
           </div>
 
           {/* PRAWA KOLUMNA: TABLICA OGŁOSZEŃ I ŚLEDZENIE DEADLINÓW GRUP */}
-          <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="lg:col-span-5 bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
             <div className="flex items-center justify-between gap-2">
               <div>
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <Icon name="pin" className="w-4 h-4 text-emerald-400" />
+                  <Icon name="pin" className="w-4 h-4 text-red-400" />
                   <span>Tablica Ogłoszeń & Realizacja Grup</span>
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-zinc-400">
                   Kliknij numer grupy przy zadaniu, aby oznaczyć jego realizację.
                 </p>
               </div>
               {canEdit && (
                 <button
                   onClick={() => setShowAnnForm(!showAnnForm)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40"
                 >
                   <Icon name="plus" className="w-3.5 h-3.5" />
                   <span>Nowe Zadanie</span>
@@ -1990,14 +2007,14 @@
             </div>
 
             {showAnnForm && canEdit && (
-              <form onSubmit={handleCreateAnnouncement} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
+              <form onSubmit={handleCreateAnnouncement} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800 space-y-3 text-xs">
                 <input
                   type="text"
                   required
                   placeholder="Tytuł ogłoszenia / zadania dla roku"
                   value={newAnn.title}
                   onChange={(e) => setNewAnn({ ...newAnn, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <input
@@ -2005,13 +2022,13 @@
                     placeholder="Przedmiot (np. Sztuczna Inteligencja)"
                     value={newAnn.course_name}
                     onChange={(e) => setNewAnn({ ...newAnn, course_name: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
                   <input
                     type="datetime-local"
                     value={newAnn.due_date}
                     onChange={(e) => setNewAnn({ ...newAnn, due_date: e.target.value })}
-                    className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
                 </div>
                 <textarea
@@ -2019,13 +2036,13 @@
                   placeholder="Szczegółowa instrukcja dla starostów grup i studentów..."
                   value={newAnn.content}
                   onChange={(e) => setNewAnn({ ...newAnn, content: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <div className="flex justify-end gap-2">
-                  <button type="button" onClick={() => setShowAnnForm(false)} className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">
+                  <button type="button" onClick={() => setShowAnnForm(false)} className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800">
                     Anuluj
                   </button>
-                  <button type="submit" className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white font-semibold">
+                  <button type="submit" className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-semibold shadow-md shadow-red-950/40">
                     Opublikuj
                   </button>
                 </div>
@@ -2036,18 +2053,18 @@
               {announcements.map((ann) => {
                 const completed = (ann.completed_groups || '').split(',').map((g) => g.trim()).filter(Boolean);
                 return (
-                  <div key={ann.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+                  <div key={ann.id} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800/90 space-y-2.5">
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
                           ann.priority === 'CRITICAL'
-                            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                            : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                            ? 'bg-red-950/70 text-red-300 border border-red-600/60 shadow-[0_0_12px_rgba(220,38,38,0.3)] font-bold'
+                            : 'bg-rose-950/40 text-rose-300 border border-rose-700/40 font-semibold'
                         }`}>
                           {ann.priority}
                         </span>
                         {ann.course_name && (
-                          <span className="ml-2 text-xs text-slate-400 font-medium">{ann.course_name}</span>
+                          <span className="ml-2 text-xs text-zinc-400 font-medium">{ann.course_name}</span>
                         )}
                         <h4 className="text-sm font-bold text-white mt-1">{ann.title}</h4>
                       </div>
@@ -2057,14 +2074,14 @@
                             await apiFetch(`/api/announcements/${ann.id}`, { method: 'DELETE' });
                             onRefresh();
                           }}
-                          className="text-slate-500 hover:text-rose-400 p-1"
+                          className="text-zinc-500 hover:text-red-400 p-1"
                         >
                           <Icon name="close" className="w-4 h-4" />
                         </button>
                       )}
                     </div>
 
-                    {ann.content && <p className="text-xs text-slate-300 leading-relaxed">{ann.content}</p>}
+                    {ann.content && <p className="text-xs text-zinc-300 leading-relaxed">{ann.content}</p>}
 
                     {ann.due_date && (
                       <p className="text-[11px] text-amber-400 font-medium inline-flex items-center gap-1">
@@ -2073,8 +2090,8 @@
                       </p>
                     )}
 
-                    <div className="pt-2 border-t border-slate-800/80">
-                      <span className="block text-[11px] text-slate-400 mb-1.5">
+                    <div className="pt-2 border-t border-zinc-800/80">
+                      <span className="block text-[11px] text-zinc-400 mb-1.5">
                         Status rozliczenia grup (kliknij, aby przełączyć):
                       </span>
                       <div className="flex flex-wrap gap-1.5">
@@ -2087,8 +2104,8 @@
                               onClick={() => toggleGroupCompletion(ann.id, grp)}
                               className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition inline-flex items-center gap-1.5 ${
                                 isDone
-                                  ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
-                                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                                  ? 'bg-emerald-950/50 border-emerald-500/50 text-emerald-300'
+                                  : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'
                               }`}
                             >
                               <Icon name={isDone ? 'check' : 'circle'} className="w-3 h-3" />
@@ -2197,16 +2214,16 @@
 
       const getCardStyle = (category) => {
         const styles = {
-          WYKLAD: 'bg-sky-500/15 border-sky-500/40 text-sky-200',
-          LAB: 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200',
-          LEKTORAT: 'bg-teal-500/15 border-teal-500/40 text-teal-200',
-          CWICZENIA: 'bg-cyan-500/15 border-cyan-500/40 text-cyan-200',
-          PROJEKT: 'bg-indigo-500/15 border-indigo-500/40 text-indigo-200',
-          KOLOKWIUM: 'bg-amber-500/20 border-amber-500/50 text-amber-200',
-          EGZAMIN: 'bg-rose-500/20 border-rose-500/50 text-rose-200',
-          DEADLINE_RAU2: 'bg-purple-500/20 border-purple-500/50 text-purple-200'
+          WYKLAD: 'bg-zinc-900/90 border-zinc-700/60 text-zinc-200 hover:border-red-500/50',
+          LAB: 'bg-emerald-950/40 border-emerald-600/50 text-emerald-200',
+          LEKTORAT: 'bg-teal-950/40 border-teal-600/50 text-teal-200',
+          CWICZENIA: 'bg-amber-950/30 border-amber-600/50 text-amber-200',
+          PROJEKT: 'bg-rose-950/30 border-rose-600/50 text-rose-200',
+          KOLOKWIUM: 'bg-red-950/60 border-red-500/60 text-red-200 shadow-[0_0_10px_rgba(220,38,38,0.2)]',
+          EGZAMIN: 'bg-red-950/80 border-red-500 text-red-100 font-bold shadow-[0_0_14px_rgba(220,38,38,0.35)]',
+          DEADLINE_RAU2: 'bg-fuchsia-950/40 border-fuchsia-600/50 text-fuchsia-200'
         };
-        return styles[category] || 'bg-slate-800 border-slate-700 text-slate-200';
+        return styles[category] || 'bg-zinc-900 border-zinc-800 text-zinc-200';
       };
 
       const handleCreateClassEvent = async (e) => {
@@ -2235,25 +2252,25 @@
       return (
         <section className="space-y-5">
           {/* Pasek sterowania kalendarzem */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Icon name="calendar" className="w-5 h-5 text-blue-400" />
+                  <Icon name="calendar" className="w-5 h-5 text-red-400" />
                   <span>Kalendarz Zajęć i Przedmiotów (USOSweb & RAU2)</span>
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-zinc-400">
                   Rozkład wykładów, laboratoriów, lektoratów, projektów oraz terminów zaliczeń pobranych z plików .ics USOSweb.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
                 {/* Przełącznik Tydzień / Miesiąc */}
-                <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+                <div className="flex bg-[#07070a] p-1 rounded-xl border border-zinc-800 text-xs font-semibold">
                   <button
                     onClick={() => setViewMode('week')}
                     className={`px-3 py-1.5 rounded-lg transition ${
-                      viewMode === 'week' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                      viewMode === 'week' ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-950/40' : 'text-zinc-400 hover:text-white'
                     }`}
                   >
                     Widok Tygodniowy
@@ -2261,7 +2278,7 @@
                   <button
                     onClick={() => setViewMode('month')}
                     className={`px-3 py-1.5 rounded-lg transition ${
-                      viewMode === 'month' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                      viewMode === 'month' ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-950/40' : 'text-zinc-400 hover:text-white'
                     }`}
                   >
                     Widok Miesięczny
@@ -2269,23 +2286,23 @@
                 </div>
 
                 {/* Nawigacja dat */}
-                <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                <div className="flex items-center gap-1 bg-[#07070a] p-1 rounded-xl border border-zinc-800">
                   <button
                     onClick={() => navigatePeriod(-1)}
-                    className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300"
+                    className="p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-300"
                     title="Poprzedni okres"
                   >
                     <Icon name="chevronLeft" className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setReferenceDate(new Date())}
-                    className="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white"
+                    className="px-3 py-1 text-xs font-semibold text-zinc-200 hover:text-white"
                   >
                     Dzisiaj
                   </button>
                   <button
                     onClick={() => navigatePeriod(1)}
-                    className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300"
+                    className="p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-300"
                     title="Następny okres"
                   >
                     <Icon name="chevronRight" className="w-4 h-4" />
@@ -2295,7 +2312,7 @@
                 {canEdit && (
                   <button
                     onClick={() => setShowAddClassModal(!showAddClassModal)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40"
                   >
                     <Icon name="plus" className="w-3.5 h-3.5" />
                     <span>Dodaj Zajęcia do Kalendarza</span>
@@ -2306,19 +2323,19 @@
 
             {/* Formularz ręcznego dodawania zajęć do siatki kalendarza */}
             {showAddClassModal && canEdit && (
-              <form onSubmit={handleCreateClassEvent} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <form onSubmit={handleCreateClassEvent} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <input
                   type="text"
                   required
                   placeholder="Przedmiot / Nazwa zajęć"
                   value={newClass.title}
                   onChange={(e) => setNewClass({ ...newClass, title: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <select
                   value={newClass.category}
                   onChange={(e) => setNewClass({ ...newClass, category: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 >
                   <option value="WYKLAD">WYKŁAD</option>
                   <option value="LAB">LABORATORIUM</option>
@@ -2333,38 +2350,38 @@
                   placeholder="Sala / Budynek (np. AEiI Sala 214)"
                   value={newClass.location}
                   onChange={(e) => setNewClass({ ...newClass, location: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <div>
-                  <label className="block text-[10px] text-slate-400 mb-1">Początek zajęć</label>
+                  <label className="block text-[10px] text-zinc-400 mb-1">Początek zajęć</label>
                   <input
                     type="datetime-local"
                     required
                     value={newClass.start_time}
                     onChange={(e) => setNewClass({ ...newClass, start_time: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-slate-400 mb-1">Koniec zajęć (opcjonalnie)</label>
+                  <label className="block text-[10px] text-zinc-400 mb-1">Koniec zajęć (opcjonalnie)</label>
                   <input
                     type="datetime-local"
                     value={newClass.end_time}
                     onChange={(e) => setNewClass({ ...newClass, end_time: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-slate-400 mb-1">Grupa docelowa</label>
+                  <label className="block text-[10px] text-zinc-400 mb-1">Grupa docelowa</label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       placeholder="Wszystkie lub np. 1"
                       value={newClass.target_group}
                       onChange={(e) => setNewClass({ ...newClass, target_group: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                      className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                     />
-                    <button type="submit" className="px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold">
+                    <button type="submit" className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-semibold shadow-md shadow-red-950/40">
                       Zapisz
                     </button>
                   </div>
@@ -2373,17 +2390,17 @@
             )}
 
             {/* Filtry typu zajęć i grup */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-zinc-800/80 text-xs">
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-slate-400 mr-1">Typ zajęć:</span>
+                <span className="text-zinc-400 mr-1">Typ zajęć:</span>
                 {['ALL', 'WYKLAD', 'LAB', 'LEKTORAT', 'CWICZENIA', 'PROJEKT', 'KOLOKWIUM', 'EGZAMIN'].map((t) => (
                   <button
                     key={t}
                     onClick={() => setTypeFilter(t)}
                     className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
                       typeFilter === t
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
+                        ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-950/40'
+                        : 'bg-[#07070a] text-zinc-400 border border-zinc-800 hover:text-white'
                     }`}
                   >
                     {t === 'ALL' ? 'Wszystkie' : t}
@@ -2392,11 +2409,11 @@
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-slate-400">Grupa:</span>
+                <span className="text-zinc-400">Grupa:</span>
                 <select
                   value={groupFilter}
                   onChange={(e) => setGroupFilter(e.target.value)}
-                  className="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-white text-xs"
+                  className="px-3 py-1 rounded-lg bg-[#07070a] border border-zinc-800 text-white text-xs focus:border-red-500"
                 >
                   <option value="ALL">Wszystkie grupy</option>
                   {allGroupsList.map((g) => (
@@ -2409,17 +2426,17 @@
 
           {/* SIATKA TYGODNIOWA (ROZKŁAD PRZEDMIOTÓW NA DNI TYGODNIA) */}
           {viewMode === 'week' ? (
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-              <div className="px-5 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs">
-                <span className="font-bold text-slate-200">
+            <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
+              <div className="px-5 py-3 bg-[#07070a] border-b border-zinc-800 flex items-center justify-between text-xs">
+                <span className="font-bold text-zinc-200">
                   Tydzień: {weekDays[0].date.toLocaleDateString('pl-PL')} — {weekDays[6].date.toLocaleDateString('pl-PL')}
                 </span>
-                <span className="text-slate-400">
+                <span className="text-zinc-400">
                   Łącznie wydarzeń w filtrze: {filteredScheduleEvents.length}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-7 divide-y md:divide-y-0 md:divide-x divide-slate-800 min-h-[480px]">
+              <div className="grid grid-cols-1 md:grid-cols-7 divide-y md:divide-y-0 md:divide-x divide-zinc-800 min-h-[480px]">
                 {weekDays.map((dayObj, idx) => {
                   const dayEvents = filteredScheduleEvents
                     .filter((ev) => isSameDay(new Date(ev.start_time), dayObj.date))
@@ -2427,19 +2444,19 @@
                   const isToday = isSameDay(dayObj.date, new Date());
 
                   return (
-                    <div key={idx} className={`flex flex-col ${isToday ? 'bg-blue-950/15' : ''}`}>
-                      <div className={`p-3 border-b border-slate-800 text-center ${isToday ? 'bg-blue-600/20' : 'bg-slate-950/60'}`}>
-                        <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                    <div key={idx} className={`flex flex-col ${isToday ? 'bg-red-950/15' : ''}`}>
+                      <div className={`p-3 border-b border-zinc-800 text-center ${isToday ? 'bg-red-950/40' : 'bg-[#07070a]/60'}`}>
+                        <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
                           {dayObj.label}
                         </div>
-                        <div className={`text-sm font-bold mt-0.5 ${isToday ? 'text-blue-400' : 'text-white'}`}>
+                        <div className={`text-sm font-bold mt-0.5 ${isToday ? 'text-red-400' : 'text-white'}`}>
                           {dayObj.date.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit' })}
                         </div>
                       </div>
 
                       <div className="p-2.5 space-y-2.5 flex-1">
                         {dayEvents.length === 0 ? (
-                          <div className="h-full flex items-center justify-center text-[11px] text-slate-600 py-8">
+                          <div className="h-full flex items-center justify-center text-[11px] text-zinc-600 py-8">
                             Brak zajęć
                           </div>
                         ) : (
@@ -2449,7 +2466,7 @@
                               className={`p-2.5 rounded-xl border text-xs space-y-1.5 relative group transition hover:brightness-110 ${getCardStyle(ev.category)}`}
                             >
                               <div className="flex items-center justify-between gap-1">
-                                <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-black/30">
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-black/40">
                                   {ev.category}
                                 </span>
                                 <span className="text-[11px] font-mono font-semibold">
@@ -2473,7 +2490,7 @@
                                     await apiFetch(`/api/calendar/events/${ev.id}`, { method: 'DELETE' });
                                     onRefresh();
                                   }}
-                                  className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 p-1 rounded bg-black/50 text-rose-300 hover:text-rose-200 transition"
+                                  className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 p-1 rounded bg-black/60 text-red-300 hover:text-red-200 transition"
                                   title="Usuń z kalendarza"
                                 >
                                   <Icon name="close" className="w-3 h-3" />
@@ -2490,19 +2507,19 @@
             </div>
           ) : (
             /* SIATKA MIESIĘCZNA */
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-              <div className="px-5 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs">
+            <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
+              <div className="px-5 py-3 bg-[#07070a] border-b border-zinc-800 flex items-center justify-between text-xs">
                 <span className="font-bold text-white uppercase tracking-wider">
                   {referenceDate.toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' })}
                 </span>
-                <span className="text-slate-400">Widok miesięczny rozkładu przedmiotów</span>
+                <span className="text-zinc-400">Widok miesięczny rozkładu przedmiotów</span>
               </div>
 
-              <div className="grid grid-cols-7 bg-slate-950 border-b border-slate-800 text-[11px] font-semibold uppercase text-slate-400 text-center py-2">
+              <div className="grid grid-cols-7 bg-[#07070a] border-b border-zinc-800 text-[11px] font-semibold uppercase text-zinc-400 text-center py-2">
                 <div>Pon</div><div>Wt</div><div>Śr</div><div>Czw</div><div>Pt</div><div>Sob</div><div>Ndz</div>
               </div>
 
-              <div className="grid grid-cols-7 divide-x divide-y divide-slate-800">
+              <div className="grid grid-cols-7 divide-x divide-y divide-zinc-800">
                 {monthDays.map((cell, i) => {
                   const dayEvents = filteredScheduleEvents.filter((ev) =>
                     isSameDay(new Date(ev.start_time), cell.date)
@@ -2513,15 +2530,15 @@
                     <div
                       key={i}
                       className={`min-h-[115px] p-2 flex flex-col gap-1 ${
-                        cell.isCurrentMonth ? 'bg-slate-900' : 'bg-slate-950/60 opacity-50'
-                      } ${isToday ? 'ring-1 ring-inset ring-blue-500 bg-blue-950/20' : ''}`}
+                        cell.isCurrentMonth ? 'bg-[#0c0c11]' : 'bg-[#07070a]/60 opacity-50'
+                      } ${isToday ? 'ring-1 ring-inset ring-red-500 bg-red-950/20' : ''}`}
                     >
                       <div className="flex items-center justify-between text-xs font-bold">
-                        <span className={isToday ? 'text-blue-400' : 'text-slate-300'}>
+                        <span className={isToday ? 'text-red-400' : 'text-zinc-300'}>
                           {cell.date.getDate()}
                         </span>
                         {dayEvents.length > 0 && (
-                          <span className="text-[10px] px-1.5 rounded bg-slate-800 text-slate-400">
+                          <span className="text-[10px] px-1.5 rounded bg-black text-zinc-400 border border-zinc-800">
                             {dayEvents.length}
                           </span>
                         )}
@@ -2627,18 +2644,18 @@
       return (
         <div className="space-y-6">
           {/* Katalog Przedmiotów RAU2 & USOSweb */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl p-6 space-y-4 shadow-xl">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-white">Katalog Przedmiotów (Platforma RAU2 & USOSweb)</h2>
-                <p className="text-xs text-slate-400">
-                  Bezpośrednie odnośniki do kursów na <code className="text-blue-400">https://platforma.polsl.pl/rau2</code>, kart przedmiotów w USOS oraz zasad zaliczenia.
+                <p className="text-xs text-zinc-400">
+                  Bezpośrednie odnośniki do kursów na <code className="text-red-400">https://platforma.polsl.pl/rau2</code>, kart przedmiotów w USOS oraz zasad zaliczenia.
                 </p>
               </div>
               {canEdit && (
                 <button
                   onClick={() => setShowCourseForm(!showCourseForm)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40"
                 >
                   <Icon name="plus" className="w-3.5 h-3.5" />
                   <span>Dodaj Przedmiot RAU2</span>
@@ -2647,14 +2664,14 @@
             </div>
 
             {showCourseForm && canEdit && (
-              <form onSubmit={handleAddCourse} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <form onSubmit={handleAddCourse} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <input
                   type="text"
                   required
                   placeholder="Kod przedmiotu (np. RAU2-SI)"
                   value={newCourse.code}
                   onChange={(e) => setNewCourse({ ...newCourse, code: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <input
                   type="text"
@@ -2662,35 +2679,35 @@
                   placeholder="Pełna nazwa przedmiotu"
                   value={newCourse.name}
                   onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white sm:col-span-2"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white sm:col-span-2 focus:border-red-500"
                 />
                 <input
                   type="text"
                   placeholder="Prowadzący (np. dr inż. Jan Kowalski)"
                   value={newCourse.lecturer}
                   onChange={(e) => setNewCourse({ ...newCourse, lecturer: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <input
                   type="url"
                   placeholder="Link do kursu RAU2 (https://platforma.polsl.pl/rau2/course/view.php?id=...)"
                   value={newCourse.rau2_url}
                   onChange={(e) => setNewCourse({ ...newCourse, rau2_url: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <input
                   type="url"
                   placeholder="Link do karty przedmiotu w USOSweb"
                   value={newCourse.usos_url}
                   onChange={(e) => setNewCourse({ ...newCourse, usos_url: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <textarea
                   rows="2"
                   placeholder="Zasady zaliczenia, progi punktowe, obecności..."
                   value={newCourse.passing_rules}
                   onChange={(e) => setNewCourse({ ...newCourse, passing_rules: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white sm:col-span-2"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white sm:col-span-2 focus:border-red-500"
                 />
                 <div className="flex items-center gap-2">
                   <input
@@ -2698,9 +2715,9 @@
                     placeholder="Przypisane grupy"
                     value={newCourse.assigned_groups}
                     onChange={(e) => setNewCourse({ ...newCourse, assigned_groups: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                    className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                   />
-                  <button type="submit" className="px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold">
+                  <button type="submit" className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-semibold shadow-md shadow-red-950/40">
                     Zapisz
                   </button>
                 </div>
@@ -2709,10 +2726,10 @@
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {courses.map((c) => (
-                <div key={c.id} className="p-5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-4">
+                <div key={c.id} className="p-5 rounded-xl bg-[#07070a] border border-zinc-800/80 hover:border-red-900/50 flex flex-col justify-between space-y-4 transition">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-red-950/50 text-red-300 border border-red-700/50">
                         {c.code} • {c.ects} ECTS
                       </span>
                       {canEdit && (
@@ -2721,7 +2738,7 @@
                             await apiFetch(`/api/courses/${c.id}`, { method: 'DELETE' });
                             onRefresh();
                           }}
-                          className="text-slate-500 hover:text-rose-400 text-xs inline-flex items-center gap-1"
+                          className="text-zinc-500 hover:text-red-400 text-xs inline-flex items-center gap-1"
                         >
                           <Icon name="trash" className="w-3.5 h-3.5" />
                           <span>Usuń</span>
@@ -2729,29 +2746,29 @@
                       )}
                     </div>
                     <h3 className="text-base font-bold text-white">{c.name}</h3>
-                    <p className="text-xs text-slate-400 flex items-center gap-1.5">
-                      <Icon name="user" className="w-3.5 h-3.5 text-slate-500" />
-                      <span>Prowadzący: <strong className="text-slate-200">{c.lecturer || '—'}</strong></span>
+                    <p className="text-xs text-zinc-400 flex items-center gap-1.5">
+                      <Icon name="user" className="w-3.5 h-3.5 text-zinc-500" />
+                      <span>Prowadzący: <strong className="text-zinc-200">{c.lecturer || '—'}</strong></span>
                     </p>
-                    <p className="text-xs text-slate-400 flex items-center gap-1.5">
-                      <Icon name="users" className="w-3.5 h-3.5 text-slate-500" />
+                    <p className="text-xs text-zinc-400 flex items-center gap-1.5">
+                      <Icon name="users" className="w-3.5 h-3.5 text-zinc-500" />
                       <span>Grupy: {c.assigned_groups}</span>
                     </p>
                     {c.passing_rules && (
-                      <div className="p-3 rounded-lg bg-slate-900 border border-slate-800/80 text-xs text-slate-300">
-                        <strong className="block text-[11px] uppercase text-slate-400 mb-0.5">Zasady zaliczenia:</strong>
+                      <div className="p-3 rounded-lg bg-black border border-zinc-800/80 text-xs text-zinc-300">
+                        <strong className="block text-[11px] uppercase text-zinc-400 mb-0.5">Zasady zaliczenia:</strong>
                         {c.passing_rules}
                       </div>
                     )}
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-800">
+                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-zinc-800">
                     {c.rau2_url && (
                       <a
                         href={c.rau2_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white transition shadow-sm shadow-red-950/40"
                       >
                         <Icon name="link" className="w-3.5 h-3.5" />
                         <span>Kurs Moodle RAU2</span>
@@ -2762,7 +2779,7 @@
                         href={c.usos_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-200 transition"
                       >
                         <Icon name="graduation" className="w-3.5 h-3.5" />
                         <span>Karta USOSweb</span>
@@ -2775,17 +2792,17 @@
           </div>
 
           {/* Agregator Kalendarzy .ics z USOSweb i Moodle RAU2 */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl p-6 space-y-4 shadow-xl">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h3 className="text-base font-bold text-white">Agregator Subskrypcji Kalendarzy iCal (.ics) — USOSweb & RAU2</h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-zinc-400">
                   Wykłady, laboratoria i lektoraty z plików .ics trafiają automatycznie do zakładki <strong>Kalendarz Zajęć</strong>, a kolokwia, egzaminy i zadania z Moodle RAU2 również na <strong>Wspólną Oś Czasu</strong>.
                 </p>
               </div>
               {canEdit && (
                 <div className="flex items-center gap-2">
-                  <label className="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200">
+                  <label className="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-200">
                     <Icon name="upload" className="w-3.5 h-3.5" />
                     <span>Wgraj plik .ics z dysku</span>
                     <input
@@ -2798,7 +2815,7 @@
                   <button
                     onClick={handleSyncAll}
                     disabled={syncing}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-xs font-semibold text-white shadow-md shadow-red-950/40"
                   >
                     <Icon name="refresh" className="w-3.5 h-3.5" />
                     <span>{syncing ? 'Synchronizacja...' : 'Synchronizuj linki .ics'}</span>
@@ -2808,19 +2825,19 @@
             </div>
 
             {canEdit && (
-              <form onSubmit={handleAddFeed} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs">
+              <form onSubmit={handleAddFeed} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800 grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs">
                 <input
                   type="text"
                   required
                   placeholder="Nazwa (np. Plan USOS RAU2)"
                   value={newFeed.name}
                   onChange={(e) => setNewFeed({ ...newFeed, name: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 />
                 <select
                   value={newFeed.source_type}
                   onChange={(e) => setNewFeed({ ...newFeed, source_type: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
                 >
                   <option value="RAU2_MOODLE">Moodle RAU2 (platforma.polsl.pl/rau2)</option>
                   <option value="USOS">USOSweb Politechnika Śląska</option>
@@ -2832,9 +2849,9 @@
                   placeholder="URL subskrypcji .ics (https://... lub webcal://...)"
                   value={newFeed.ics_url}
                   onChange={(e) => setNewFeed({ ...newFeed, ics_url: e.target.value })}
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white sm:col-span-2"
+                  className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white sm:col-span-2 focus:border-red-500"
                 />
-                <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold">
+                <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-semibold shadow-md shadow-red-950/40">
                   <Icon name="plus" className="w-3.5 h-3.5" />
                   <span>Podepnij Kalendarz</span>
                 </button>
@@ -2843,19 +2860,19 @@
 
             <div className="space-y-2">
               {feeds.length === 0 ? (
-                <p className="text-xs text-slate-500 py-4 text-center">
+                <p className="text-xs text-zinc-500 py-4 text-center">
                   Brak podpiętych zewnętrznych linków .ics. Dodaj link powyżej lub wgraj plik .ics.
                 </p>
               ) : (
                 feeds.map((f) => (
-                  <div key={f.id} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+                  <div key={f.id} className="p-3.5 rounded-xl bg-[#07070a] border border-zinc-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
                     <div>
                       <span className="font-bold text-white">{f.name}</span>
-                      <span className="ml-2 px-2 py-0.5 rounded bg-slate-800 text-blue-300 text-[11px]">{f.source_type}</span>
-                      <p className="text-[11px] text-slate-500 truncate max-w-xl mt-0.5">{f.ics_url}</p>
+                      <span className="ml-2 px-2 py-0.5 rounded bg-black border border-zinc-800 text-red-300 text-[11px]">{f.source_type}</span>
+                      <p className="text-[11px] text-zinc-500 truncate max-w-xl mt-0.5">{f.ics_url}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-zinc-400">
                         Ostatnia synchr.: {formatDateTime(f.last_synced_at)}
                       </span>
                       {canEdit && (
@@ -2864,7 +2881,7 @@
                             await apiFetch(`/api/calendar/feeds/${f.id}`, { method: 'DELETE' });
                             onRefresh();
                           }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-rose-500/15 text-rose-300 hover:bg-rose-500/30"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-red-950/40 border border-red-900/40 text-red-300 hover:bg-red-950/70"
                         >
                           <Icon name="trash" className="w-3.5 h-3.5" />
                           <span>Usuń</span>
@@ -2927,22 +2944,22 @@
 
       return (
         <div className="space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div className="bg-[#0c0c11]/90 border border-zinc-800/80 rounded-2xl p-6 space-y-4 shadow-xl">
             <div>
               <h2 className="text-lg font-bold text-white">Zarządzanie Użytkownikami i Uprawnieniami (RBAC)</h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-zinc-400">
                 Moduł dostępny wyłącznie dla Głównego Administratora (Starosty Roku). Twórz konta dla starostów poszczególnych grup dziekańskich/laboratoryjnych i nadawaj im tymczasowe hasła.
               </p>
             </div>
 
-            <form onSubmit={handleCreateUser} className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-6 gap-3 text-xs">
+            <form onSubmit={handleCreateUser} className="p-4 rounded-xl bg-[#07070a] border border-zinc-800 grid grid-cols-1 sm:grid-cols-6 gap-3 text-xs">
               <input
                 type="text"
                 required
                 placeholder="Imię i Nazwisko (np. Starosta Grupy 2)"
                 value={newUser.full_name}
                 onChange={(e) => setNewUser({ ...newUser, full_name: e.target.value })}
-                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
               />
               <input
                 type="email"
@@ -2950,7 +2967,7 @@
                 placeholder="Email (@student.polsl.pl)"
                 value={newUser.email}
                 onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
               />
               <input
                 type="text"
@@ -2959,12 +2976,12 @@
                 placeholder="Tymczasowe hasło (min. 6 zn.)"
                 value={newUser.password}
                 onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
               />
               <select
                 value={newUser.role}
                 onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
               >
                 <option value="GROUP_LEADER">GROUP_LEADER (Starosta Grupy)</option>
                 <option value="VIEWER">VIEWER (Tylko odczyt)</option>
@@ -2975,9 +2992,9 @@
                 placeholder="Przypisana grupa (np. 2, Lab 1A)"
                 value={newUser.assigned_group}
                 onChange={(e) => setNewUser({ ...newUser, assigned_group: e.target.value })}
-                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"
+                className="px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-white focus:border-red-500"
               />
-              <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-bold text-white">
+              <button type="submit" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 font-bold text-white shadow-md shadow-red-950/40">
                 <Icon name="plus" className="w-3.5 h-3.5" />
                 <span>Utwórz Konto</span>
               </button>
@@ -2986,7 +3003,7 @@
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-slate-950 border-b border-slate-800 text-[11px] uppercase text-slate-400">
+                  <tr className="bg-[#07070a] border-b border-zinc-800 text-[11px] uppercase text-zinc-400">
                     <th className="p-3.5">Użytkownik</th>
                     <th className="p-3.5">Rola RBAC</th>
                     <th className="p-3.5">Grupa</th>
@@ -2995,21 +3012,21 @@
                     <th className="p-3.5 text-right">Akcje</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-zinc-800">
                   {users.map((u) => (
-                    <tr key={u.id} className="hover:bg-slate-800/30">
+                    <tr key={u.id} className="hover:bg-zinc-900/30">
                       <td className="p-3.5">
                         <div className="flex items-center gap-2.5">
                           {u.avatar_url ? (
-                            <img src={u.avatar_url} alt={u.full_name} className="w-7 h-7 rounded-full object-cover border border-slate-700" />
+                            <img src={u.avatar_url} alt={u.full_name} className="w-7 h-7 rounded-full object-cover border border-zinc-700" />
                           ) : (
-                            <div className="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                            <div className="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-300">
                               {getInitials(u.full_name)}
                             </div>
                           )}
                           <div>
                             <div className="font-bold text-white">{u.full_name}</div>
-                            <div className="text-slate-400 font-mono text-[11px]">{u.email}</div>
+                            <div className="text-zinc-400 font-mono text-[11px]">{u.email}</div>
                           </div>
                         </div>
                       </td>
@@ -3018,17 +3035,17 @@
                           disabled={u.id === currentAdminId}
                           value={u.role}
                           onChange={(e) => handleRoleOrStatusChange(u.id, { role: e.target.value })}
-                          className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-700 text-white disabled:opacity-50"
+                          className="px-2.5 py-1 rounded-lg bg-black border border-zinc-800 text-white disabled:opacity-50 focus:border-red-500"
                         >
                           <option value="ADMIN">ADMIN</option>
                           <option value="GROUP_LEADER">GROUP_LEADER</option>
                           <option value="VIEWER">VIEWER</option>
                         </select>
                       </td>
-                      <td className="p-3.5 text-slate-300">{u.assigned_group || 'Wszystkie'}</td>
+                      <td className="p-3.5 text-zinc-300">{u.assigned_group || 'Wszystkie'}</td>
                       <td className="p-3.5">
                         <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
-                          u.is_active ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'
+                          u.is_active ? 'bg-emerald-950/50 text-emerald-300 border border-emerald-800/40' : 'bg-red-950/50 text-red-300 border border-red-800/40'
                         }`}>
                           {u.is_active ? 'Aktywne' : 'Zablokowane'}
                         </span>
@@ -3040,12 +3057,12 @@
                             placeholder="Nowe hasło tymczasowe..."
                             value={resetPasswords[u.id] || ''}
                             onChange={(e) => setResetPasswords({ ...resetPasswords, [u.id]: e.target.value })}
-                            className="px-2.5 py-1 rounded bg-slate-950 border border-slate-700 text-white"
+                            className="px-2.5 py-1 rounded bg-black border border-zinc-800 text-white focus:border-red-500"
                           />
                           <button
                             type="button"
                             onClick={() => handleResetPassword(u.id)}
-                            className="px-2.5 py-1 rounded bg-amber-600/80 hover:bg-amber-500 text-white font-semibold"
+                            className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-white font-semibold border border-zinc-700"
                           >
                             Nadaj
                           </button>
@@ -3056,7 +3073,7 @@
                           <>
                             <button
                               onClick={() => handleRoleOrStatusChange(u.id, { is_active: !u.is_active })}
-                              className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                              className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700"
                             >
                               {u.is_active ? 'Zablokuj' : 'Odblokuj'}
                             </button>
@@ -3066,7 +3083,7 @@
                                 await apiFetch(`/api/users/${u.id}`, { method: 'DELETE' });
                                 onRefresh();
                               }}
-                              className="px-2.5 py-1 rounded bg-rose-500/20 hover:bg-rose-500/40 text-rose-300"
+                              className="px-2.5 py-1 rounded bg-red-950/40 hover:bg-red-950/70 border border-red-900/40 text-red-300"
                             >
                               Usuń
                             </button>
